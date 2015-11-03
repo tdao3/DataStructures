@@ -16,13 +16,16 @@ public class Node2 extends Node
     //POST: A Node2 object is created with a key set to key, child nodes set to 
     //      corresponding pointers in children, and a parent node set to parent.
     {
-    	int counter;
+    	int counter;           //counter for for loop
+
     	keys = new int[1];
     	this.children = new Node[2];
     	
+        // setting the key and parent input parameters 
         keys[0] = key;
         this.parent = parent;
         
+        // setting children to input parameters
         for(counter = 0; counter < 2; counter++)
         {
             this.children[counter] = children[counter];
@@ -45,14 +48,15 @@ public class Node2 extends Node
     //      The child pointer of the parent of this node is updated to point to the new Node3 object
     //      created.
     {
-    	int[] newKeys;
-    	Node[] updatedChildren;
+    	int[] newKeys;             // keys of the new created node
+    	Node[] updatedChildren;    // new node containing 3 children 
     	
+        // allocating space for the 2 new keys and 3 children (format of Node3)
     	newKeys = new int[2];
-    	updatedChildren = new Node[3];
-    	
-    	newKeys[0] = this.keys[0];
-    	newKeys[1] = pushedNode.keys[0];
+    	updatedChildren = new Node[3]; 
+    
+    	newKeys[0] = this.keys[0];         //copies original key to newKeys 
+    	newKeys[1] = pushedNode.keys[0];   //adds the newly added key to newKeys
     	
     	if(pushedNode.keys[0] < keys[0])
     	{

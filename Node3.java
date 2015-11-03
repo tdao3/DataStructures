@@ -16,6 +16,8 @@ public class Node3 extends Node
 	//POST: a new Node3 is created with class members keys, children, and parent equal to paramaters
 	//		keys, children and parent
 	{
+		int i; 			//counter for loop
+
 		this.keys = new int[2];			//allocate array of keys 
 		this.children = new Node[4];	//allocate array of children
 
@@ -24,7 +26,7 @@ public class Node3 extends Node
 
 		if(children != null)			//sets children to be children parameters 
 		{	
-			for(int i = 0; i < 3; i++)	
+			for(i = 0; i < 3; i++)	
 			{
 				this.children[i] = children[i];
 			}

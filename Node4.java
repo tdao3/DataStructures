@@ -14,8 +14,8 @@ public class Node4 extends Node
     //       an array which is null denoting no children, or an array of length
     //       4 with 4 initialized Nodes in it. parent is null if the node has no
     //       parent, or otherwise is initialized.
-    // POST: a new Node4 is created with class member keys and children equal to 
-    //       the parameters keys and children, respectively
+    // POST: a new Node4 is created with class member keys, children, and parent equal to 
+    //       the parameters keys, children and parent, respectively
     {
         this.keys = new int[3];         // allocate the array of keys
         this.children = new Node[4];

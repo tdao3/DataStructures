@@ -20,10 +20,12 @@ public class Node4 extends Node
         this.keys = new int[3];         // allocate the array of keys
         this.children = new Node[4];
         
+        // sets all keys to the input keys
         this.keys[0] = keys[0];
         this.keys[1] = keys[1];
         this.keys[2] = keys[2];
         
+        // sets all children, if they exist, to the input children
         if(children != null)
         {
             this.children[0] = children[0];
@@ -61,11 +63,11 @@ public class Node4 extends Node
         {
             return children[1];
         }
-        else if(n < keys[2])
+        else if(n < keys[2])        //n is between the second and third keys
         {
             return children[2];
         }
-        else
+        else                        //n is greater than last key
         {
             return children[3];
         }

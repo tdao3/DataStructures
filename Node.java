@@ -19,6 +19,21 @@ public abstract class Node
         this.parent = parent;
     }
     
+    public void updateChildPtr(Node oldChild, Node newChild)
+    // PRE:  oldChild and newChild are initialized
+    // POST: the pointer in children to oldChild now points to newChild.
+    //       to be used in the event of a child node being updated between types
+    {
+        // iterate through the children nodes to find the oldChild
+        for(int i = 0; i < children.length; i++)
+        {
+            if(children[i] == oldChild) // if oldChild is found
+            {
+                children[i] = newChild; // set it to newChild
+            }
+        }
+    }
+    
     public boolean hasKey(int n)
     // PRE:  n is initialized
     // POST: FCTVAL == true if this node has the key n inside it, false otherwise

@@ -49,16 +49,17 @@ public class Node2 extends Node
     //      created.
     {
     	int[] newKeys;             // keys of the new created node
-    	Node[] updatedChildren;    // new node containing 3 children 
+    	Node[] updatedChildren;    // new array containing 3 children 
+        Node3 updatedNode;         // the newly created Node 
     	
         // allocating space for the 2 new keys and 3 children (format of Node3)
     	newKeys = new int[2];
     	updatedChildren = new Node[3]; 
     
-    	newKeys[0] = this.keys[0];         //copies original key to newKeys 
-    	newKeys[1] = pushedNode.keys[0];   //adds the newly added key to newKeys
+    	newKeys[0] = this.keys[0];         // copies original key to newKeys 
+    	newKeys[1] = pushedNode.keys[0];   // adds the newly added key to newKeys
     	
-    	if(pushedNode.keys[0] < keys[0])
+    	if(pushedNode.keys[0] < keys[0])   // updating order of children
     	{
     	    updatedChildren[0] = pushedNode.getChildren()[0];
     	    updatedChildren[1] = pushedNode.getChildren()[1];
@@ -71,9 +72,9 @@ public class Node2 extends Node
     	    updatedChildren[2] = pushedNode.getChildren()[1];
     	}
     	
-    	Node3 updatedNode = new Node3(newKeys, updatedChildren, parent);
-    	parent.updateChildPtr(this, updatedNode);
-    	
+    	updatedNode = new Node3(newKeys, updatedChildren, parent);
+    	parent.updateChildPtr(this, updatedNode);     //the new Node3 becomes the parent of 
+                                                      //    all the previous children
         return updatedNode;
     }
 

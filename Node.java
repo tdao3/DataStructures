@@ -28,6 +28,13 @@ public abstract class Node
         }
     }
     
+    public void setParent(Node parent)
+    // PRE:  parent is null if no parent or is initialized otherwise
+    // POST: class member parent equals the parameter Node parent
+    {
+        this.parent = parent;
+    }
+    
     public int[] getKeys()
     // POST: FCTVAL == an int[] keys of this Node
     {

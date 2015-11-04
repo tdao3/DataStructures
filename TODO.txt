@@ -1,0 +1,6 @@
+1) Create a smiliar absorb method for the Node3 class
+
+2) Either update child ptrs' parents of the new absorbed node inside the absorbNode method 
+or create a separate method to do that
+
+3) ...

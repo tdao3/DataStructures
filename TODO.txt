@@ -7,6 +7,5 @@ or create a separate method to do that
 
 4) Create a small driver to see if this even works
 
-GIT BLOWS
 
 

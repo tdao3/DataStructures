@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.Color;
 
 public class Node3 extends Node
 {

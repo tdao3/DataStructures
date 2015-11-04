@@ -80,16 +80,23 @@ public class Node4 extends Node
     {
         // creating 3 new Node2 by splitting the Node4
         
-        Node2 lChild = new Node2(keys[0], new Node[]{children[0], children[1]});
-        Node2 rChild = new Node2(keys[2], new Node[]{children[2], children[3]});
-        Node2 newParent = new Node2(keys[1], new Node[]{lChild, rChild});
+        Node2 lChild = new Node2(keys[0], new Node[]{children[0], children[1]}, null);
+        Node2 rChild = new Node2(keys[2], new Node[]{children[2], children[3]}, null);
+        Node2 newParent = new Node2(keys[1], new Node[]{lChild, rChild}, null);
         
         lChild.setParent(newParent);
         rChild.setParent(newParent);
         
         if(parent != null) // this is not the root node
         {
-            return parent.absorbNode(newParent);
+        	if(parent instanceof Node2)  //If the parent is a Node2 object
+        	{
+                return ((Node2)(parent)).absorbNode(newParent);
+        	}
+        	else   //If the parent is a Node3 object
+        	{
+        	    //return ((Node3)(parent)).absorbNode(newParent);
+        	}
         }
         // otherwise just return the newParent node
         return newParent;

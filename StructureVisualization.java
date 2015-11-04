@@ -16,14 +16,16 @@ public class StructureVisualization extends JApplet implements ActionListener
     private JButton finishButton;      // Button to finish the rest of the steps of the current operation.
     
     private JTextField inputValueField;  // Input field to gather a data value for the operation.
+    private JLabel inputLabel;           // Label for the inputValueField
     
     private JPanel buttonPanelSection;   // Panel to hold all button panels.
     private JPanel topButtonRow;         // Panel to hold operation buttons and input field.
+    private JPanel middleInputRow;       // Panel to hold input value field and label
     private JPanel bottomButtonRow;      // Panel to hold stepping through operation buttons.
     private JPanel drawingArea;          // Panel where the tree with be displayed 
     
     private int drawAreaHeight;          // Height of JPanel drawingArea used for drawing tree
-    private int drawAreaWidth;           // Width of Jpanel drawingArea  used for drawing tree
+    private int drawAreaWidth;           // Width of JPanel drawingArea  used for drawing tree
     
     public void init()
     {
@@ -41,11 +43,15 @@ public class StructureVisualization extends JApplet implements ActionListener
         //Initialize text field.
         inputValueField = new JTextField(10);
         
+        //Initialize label
+        inputLabel = new JLabel("Enter value:");
+        
         //Initialize panels
         buttonPanelSection = new JPanel();
         buttonPanelSection.setLayout(new BorderLayout());
         
         topButtonRow = new JPanel();
+        middleInputRow = new JPanel();
         bottomButtonRow = new JPanel();
 
         //Initialize drawing area
@@ -64,7 +70,10 @@ public class StructureVisualization extends JApplet implements ActionListener
         topButtonRow.add(insertButton);
         topButtonRow.add(searchButton);
         topButtonRow.add(deleteButton);
-        topButtonRow.add(inputValueField);
+        
+        //Add components to middle row of input label and text field.
+        middleInputRow.add(inputLabel);
+        middleInputRow.add(inputValueField);
         
         //Add components to bottom row of buttons.
         bottomButtonRow.add(stepButton);
@@ -72,11 +81,11 @@ public class StructureVisualization extends JApplet implements ActionListener
         
         //Add panels to border layout.
         buttonPanelSection.add(topButtonRow, BorderLayout.NORTH);
+        buttonPanelSection.add(middleInputRow, BorderLayout.CENTER);
         buttonPanelSection.add(bottomButtonRow, BorderLayout.SOUTH);
         add(buttonPanelSection, BorderLayout.NORTH);
         add(drawingArea, BorderLayout.CENTER);
-        
-        
+       
     }
     
     //Paint the GUI, and gets the graphics object.   

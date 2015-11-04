@@ -37,9 +37,40 @@ public class Node3 extends Node
 		this.coord = coord;
 	}
 
-	public void drawNode(Graphics g)
+	public void drawNode(Graphics g, boolean selected)
     {
-        // TO DOOOOOOOOOOOOOOOOOOOO
+    	int nodeX; 		//x coord of top left corner of node
+    	int nodeY;		//y coord of top left corner of node
+
+    	//grabbing coordinates of the node 
+    	nodeX = coord.getX(g.getWidth());
+    	nodeY = coord.getX(g.getHeight());
+
+    	if(selected)
+    	{
+    		g.setColor(120,255,120);	//when node is selected border is green
+    	    g.fillRect(coord.getX(g.getWidth()), coord.getY(g.getHeight()), 75, 23);
+
+    	}
+    
+    	g.setColor(Color.BLACK);			//sets color to normally be black
+
+    	g.drawRect(nodeX, nodeY, 50, 5);	//draws the actual node 
+
+    	g.drawLine(nodeX + 25, nodeY + 25)		
+    				nodeX + 25, nodeY + 25);
+		
+    	g.drawString(keys[0], nodeX + 2, nodeY + 15);		//draws 2 keys and distance between keys
+    	g.drawString(keys[1], nodeX + 27, nodeY + 15);
+
+    	for(int i = 0; i < children.length; i++)			//go through children
+    	{
+    		if(children[i] instance of Node2)				//if child is a 2 Node 
+    		{
+    			g.drawLine(nodeX + (25*i), nodeY + 25, children[i].coord.getX(g.getWidth()) + 12,
+    			g.getHeight()));
+    		}
+    	}
     }
 
 	public Node4 absorbNode(Node2 pushedNode)

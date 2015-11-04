@@ -6,14 +6,14 @@ public class Node3 extends Node
 	//POST: An object of Node3 is created with keys {1,2} 
 	//		and no parent or child values (both set to null)
 	{
-		this(new int[]{1,2}, null, null);
+		this(new int[]{1,2}, null, null, new ScaledPoint(0, 0));
 	}
 	
-	public Node3(int[] keys, Node[] children, Node parent)
+	public Node3(int[] keys, Node[] children, Node parent, ScaledPoint coord)
 	//PRE:	keys is an initialized array with exactly 2 values, children is a array
 	//		with exactly 3 values or is null meaning there is no children, parent is 
 	//		null if Node3 has no parent, otherwise initialized
-	//POST: a new Node3 is created with class members keys, children, and parent equal to paramaters
+	//POST: a new Node3 is created with class members keys, children, and parent equal to parameters
 	//		keys, children and parent
 	{
 		int i; 			//counter for loop
@@ -21,7 +21,7 @@ public class Node3 extends Node
 		this.keys = new int[2];			//allocate array of keys 
 		this.children = new Node[4];	//allocate array of children
 
-		this.keys[0] = keys[0];			//keys set to paramater keys 
+		this.keys[0] = keys[0];			//keys set to parameter keys 
 		this.keys[1] = keys[1];
 
 		if(children != null)			//sets children to be children parameters 
@@ -33,6 +33,8 @@ public class Node3 extends Node
 		}
 
 		this.parent = parent; 	//set parent of the node 
+		
+		this.coord = coord;
 	}
 
 	public void drawNode(Graphics g)
@@ -40,6 +42,67 @@ public class Node3 extends Node
         // TO DOOOOOOOOOOOOOOOOOOOO
     }
 
+	public Node4 absorbNode(Node2 pushedNode)
+    //PRE:  pushedNode must be initialized.
+    //POST: FCTVAL = a Node4 object whose keys and children become a combination of this node's
+    //      key and children, and the pushedNode's key and children, based on the relationship 
+    //      between this node and the pushedNode.
+    //      The child pointer of the parent of this node is updated to point to the new Node4 object
+    //      created.
+    {
+    	int[] newKeys;             // keys of the new created node
+    	Node[] updatedChildren;    // new array containing 3 children 
+        Node4 updatedNode;         // the newly created Node 
+    	
+        // allocating space for the 3 new keys and 4 children (format of Node4)
+    	newKeys = new int[3];
+    	updatedChildren = new Node[4]; 
+    	
+    	if(pushedNode.keys[0] < keys[0])   // updating order of children
+    	{
+			newKeys[0] = pushedNode.keys[0];   // adds the newly added key to newKeys
+			newKeys[1] = this.keys[0];         // copies original key to newKeys 
+			newKeys[2] = this.keys[1];
+    	    updatedChildren[0] = pushedNode.getChildren()[0];
+    	    updatedChildren[1] = pushedNode.getChildren()[1];
+    	    updatedChildren[2] = children[1];
+			updatedChildren[3] = children[2];
+    	}
+    	else if(pushedNode.keys[0] < keys[1])
+    	{
+			newKeys[0] = this.keys[0];         // copies original key to newKeys 
+			newKeys[1] = pushedNode.keys[0];   // adds the newly added key to newKeys
+			newKeys[2] = this.keys[1];
+    		updatedChildren[0] = children[0];
+    	    updatedChildren[1] = pushedNode.getChildren()[0];
+    	    updatedChildren[2] = pushedNode.getChildren()[1];
+			updatedChildren[3] = children[2];
+    	}
+		else								   // 
+		{
+			newKeys[0] = this.keys[0];         // copies original key to newKeys 
+			newKeys[1] = this.keys[1];
+			newKeys[2] = pushedNode.keys[0];   // adds the newly added key to newKeys
+    		updatedChildren[0] = children[0];
+			updatedChildren[1] = children[1];
+			updatedChildren[2] = pushedNode.getChildren()[0];
+    	    updatedChildren[3] = pushedNode.getChildren()[1];
+		}
+    	
+    	updatedNode = new Node4(newKeys, updatedChildren, parent, coord);
+    	parent.updateChildPtr(this, updatedNode);     //the new Node3 becomes the parent of 
+                                                      //    all the previous children
+		
+		// set children of new updatedNode to point to updated
+		// node as parent
+		for(Node n : updatedChildren)
+		{
+			n.setParent(updatedNode);
+		}
+		
+        return updatedNode;
+    }
+	
     public Node findPath(int n)
     //PRE:	n is initialized
     //POST:	FCTVAL == the next node on the path to find location of n.

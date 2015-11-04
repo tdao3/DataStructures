@@ -19,6 +19,13 @@ public abstract class Node
     {
         this.parent = parent;
     }
+	
+	public void setCoord(ScaledPoint coord)
+	// PRE:  coord is initialized
+	// POST: class member coord is set to the parameter coord
+	{
+		this.coord = coord;
+	}
     
     public void updateChildPtr(Node oldChild, Node newChild)
     // PRE:  oldChild and newChild are initialized

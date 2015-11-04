@@ -6,10 +6,10 @@ public class Node4 extends Node
     // POST: a new Node4 is created with keys of {1, 2, 3} and children 
     //       of {null, null, null, null}
     {
-        this(new int[]{1, 2, 3}, null, null);
+        this(new int[]{1, 2, 3}, null, null, new ScaledPoint(0, 0));
     }
     
-    public Node4(int[] keys, Node[] children, Node parent)
+    public Node4(int[] keys, Node[] children, Node parent, ScaledPoint coord)
     // PRE:  keys is an array of length 3 with 3 values in it and children is
     //       an array which is null denoting no children, or an array of length
     //       4 with 4 initialized Nodes in it. parent is null if the node has no
@@ -42,6 +42,8 @@ public class Node4 extends Node
         }
         
         this.parent = parent;
+		
+		this.coord = coord;
     }
     
     public void drawNode(Graphics g)
@@ -95,7 +97,7 @@ public class Node4 extends Node
         	}
         	else   //If the parent is a Node3 object
         	{
-        	    //return ((Node3)(parent)).absorbNode(newParent);
+        	    return ((Node3)(parent)).absorbNode(newParent);
         	}
         }
         // otherwise just return the newParent node

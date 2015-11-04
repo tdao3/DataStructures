@@ -2,17 +2,16 @@ import java.awt.Graphics;
 
 public class Node2 extends Node
 {
-	
 	public Node2()
     //POST: A default Node2 object is created with a key set to 1, child nodes and
 	//      parent node set to null.
     {
-        this(1, null, null); 
+        this(1, null, null, new ScaledPoint(0, 0)); 
     }
 	
-    public Node2(int key, Node[] children, Node parent)
+    public Node2(int key, Node[] children, Node parent, ScaledPoint coord)
     //PRE: key, and parent initialized. children initialized with 2 initialized 
-    //     pointers in the array.
+    //     pointers in the array, and coord is initialized.
     //POST: A Node2 object is created with a key set to key, child nodes set to 
     //      corresponding pointers in children, and a parent node set to parent.
     {
@@ -31,6 +30,8 @@ public class Node2 extends Node
             this.children[counter] = children[counter];
         }
         
+		this.coord = coord;
+		
     }
 
     @Override
@@ -56,25 +57,35 @@ public class Node2 extends Node
     	newKeys = new int[2];
     	updatedChildren = new Node[3]; 
     
-    	newKeys[0] = this.keys[0];         // copies original key to newKeys 
-    	newKeys[1] = pushedNode.keys[0];   // adds the newly added key to newKeys
-    	
     	if(pushedNode.keys[0] < keys[0])   // updating order of children
     	{
+			newKeys[0] = pushedNode.keys[0];   // adds the newly added key to newKeys
+			newKeys[1] = this.keys[0];         // copies original key to newKeys 
     	    updatedChildren[0] = pushedNode.getChildren()[0];
     	    updatedChildren[1] = pushedNode.getChildren()[1];
     	    updatedChildren[2] = children[1];
     	}
     	else
     	{
+			newKeys[0] = this.keys[0];         // copies original key to newKeys 
+			newKeys[1] = pushedNode.keys[0];   // adds the newly added key to newKeys
     		updatedChildren[0] = children[0];
     	    updatedChildren[1] = pushedNode.getChildren()[0];
     	    updatedChildren[2] = pushedNode.getChildren()[1];
     	}
     	
-    	updatedNode = new Node3(newKeys, updatedChildren, parent);
+    	updatedNode = new Node3(newKeys, updatedChildren, parent, coord);
     	parent.updateChildPtr(this, updatedNode);     //the new Node3 becomes the parent of 
                                                       //    all the previous children
+		
+		// set children of new updatedNode to point to updated
+		// node as parent
+		for(Node n : updatedChildren)
+		{
+			n.setParent(updatedNode);
+		}
+		
+		
         return updatedNode;
     }
 

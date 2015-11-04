@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.Color;
 
 public class Node2 extends Node
 {
@@ -35,10 +36,52 @@ public class Node2 extends Node
     }
 
     @Override
-    public void drawNode(Graphics g) 
+    public void drawNode(Graphics g, boolean selected) 
+    //PRE: g and selected is initialized.
+    //POST: a rectangle node is drawn  and its color is
+    //      based on whether this node is the current node in the step
+    //      process.
     {
-	    // TODO Auto-generated method stub
+    	int nodeX;     // x coord of top left corner of node
+    	int nodeY;     // y coord of top left corner of node
     	
+    	nodeX = coord.getX(g.getWidth());
+    	nodeY = coord.getY(g.getHeight());
+    	
+        if(selected)    //If this is the current node  
+        {
+            g.setColor(new Color(0, 200, 0);
+            g.fillRect(nodeX, nodeY, 45, 25);
+        }
+
+        //Draw a black rectangle border.
+    	g.setColor(Color.BLACK);
+        g.drawRect(nodeX, nodeY, 45, 25);
+        
+        //Draw the key inside the rectangle.
+        g.drawString(keys[0], nodeX + 2, nodeY + 12);
+        
+        for(int i = 0; i < children.length; i++) // iterate through children
+		{
+			if (children[i] instanceof Node2) // if the child is a Node2
+			{
+				g.drawLine(nodeX + (25*i), nodeY + 25,
+						   children[i].coord.getX(g.getWidth()) + 12,
+						   children[i].coord.getY(g.getHeight()));
+			}
+			else if (children[i] instanceof Node3) // if the child is a Node3
+			{
+				g.drawLine(nodeX + (25*i), nodeY + 25,
+						   children[i].coord.getX(g.getWidth()) + 25,
+						   children[i].coord.getY(g.getHeight()));
+			}
+			else if (children[i] instanceof Node4) // if the child is a Node4
+			{
+				g.drawLine(nodeX + (25*i), nodeY + 25,
+						   children[i].coord.getX(g.getWidth()) + 37,
+						   children[i].coord.getY(g.getHeight()));
+			}
+		}
     }
     
     public Node3 absorbNode(Node2 pushedNode)

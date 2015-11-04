@@ -6,7 +6,7 @@ public class Node3 extends Node
 	//POST: An object of Node3 is created with keys {1,2} 
 	//		and no parent or child values (both set to null)
 	{
-		this(int new[]{1,2}, null, null)
+		this(new int[]{1,2}, null, null);
 	}
 	
 	public Node3(int[] keys, Node[] children, Node parent)
@@ -32,7 +32,7 @@ public class Node3 extends Node
 			}
 		}
 
-		this.parent = parent 	//set parent of the node 
+		this.parent = parent; 	//set parent of the node 
 	}
 
 	public void drawNode(Graphics g)
@@ -53,9 +53,11 @@ public class Node3 extends Node
     	{
     		return children[1];
     	}	
-    	else if (n > key[3])		//n greater than the last key
+    	else if (n > keys[2])		//n greater than the last key
     	{
     		return children[2];
     	}
+
+    	return null;
     }
 }

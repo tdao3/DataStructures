@@ -20,7 +20,10 @@ public class StructureVisualization extends JApplet implements ActionListener
     private JPanel buttonPanelSection;   // Panel to hold all button panels.
     private JPanel topButtonRow;         // Panel to hold operation buttons and input field.
     private JPanel bottomButtonRow;      // Panel to hold stepping through operation buttons.
+    private JPanel drawingArea;          // Panel where the tree with be displayed 
     
+    private int drawAreaHeight;          // Height of JPanel drawingArea used for drawing tree
+    private int drawAreaWidth;           // Width of Jpanel drawingArea  used for drawing tree
     
     public void init()
     {
@@ -44,6 +47,11 @@ public class StructureVisualization extends JApplet implements ActionListener
         
         topButtonRow = new JPanel();
         bottomButtonRow = new JPanel();
+
+        //Initialize drawing area
+        drawingArea = new JPanel();
+        drawAreaHeight = drawingArea.getHeight();       //getting height and width of drawing area
+        drawAreaWidth = drawingArea.getWidth();    
         
         //Add action listeners to buttons.
         insertButton.addActionListener(this);
@@ -66,6 +74,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         buttonPanelSection.add(topButtonRow, BorderLayout.NORTH);
         buttonPanelSection.add(bottomButtonRow, BorderLayout.SOUTH);
         add(buttonPanelSection, BorderLayout.NORTH);
+        add(drawingArea, BorderLayout.CENTER);
         
         
     }
@@ -73,7 +82,7 @@ public class StructureVisualization extends JApplet implements ActionListener
     //Paint the GUI, and gets the graphics object.   
     public void paint(Graphics g)
     {
-        super.paint(g);     
+        super.paint(g);    
     }
 	
     @Override

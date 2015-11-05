@@ -58,7 +58,7 @@ public class Node3 extends Node
 
     	g.drawRect(nodeX, nodeY, 50, 5);	//draws the actual node 
 
-    	g.drawLine(nodeX + 25, nodeY + 25)		
+    	g.drawLine(nodeX + 25, nodeY + 25,		
     				nodeX + 25, nodeY + 25);
 		
     	g.drawString(keys[0], nodeX + 2, nodeY + 15);		//draws 2 keys and distance between keys
@@ -66,10 +66,10 @@ public class Node3 extends Node
 
     	for(int i = 0; i < children.length; i++)			//go through children
     	{
-    		if(children[i] instance of Node2)				//if child is a 2 Node 
+    		if(children[i] instanceof Node2)				//if child is a 2 Node 
     		{
     			g.drawLine(nodeX + (25*i), nodeY + 25, children[i].coord.getX(g.getWidth()) + 12,
-    			g.getHeight()));
+    			g.getHeight());
     		}
     	}
     }

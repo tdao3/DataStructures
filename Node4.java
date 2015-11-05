@@ -69,11 +69,11 @@ public class Node4 extends Node
 		g.drawRect(nodeX, nodeY, 75, 25); // draw black border
 		
 		// draw first divider
-		g.drawLine(nodeX + 25, nodeY),
+		g.drawLine(nodeX + 25, nodeY,
 				   nodeX + 25, nodeY + 25);
 		
 		// draw second divider
-		g.drawLine(nodeX + 50, nodeY),
+		g.drawLine(nodeX + 50, nodeY,
 				   nodeX + 50, nodeY + 25);
 		
 		// draw numbers of 3 keys

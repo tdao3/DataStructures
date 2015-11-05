@@ -35,7 +35,7 @@ public class Node2 extends Node
 		
     }
 
-    @Override
+    //@Override
     public void drawNode(Graphics g, boolean selected) 
     //PRE: g and selected is initialized.
     //POST: a rectangle node is drawn  and its color is
@@ -50,7 +50,7 @@ public class Node2 extends Node
     	
         if(selected)    //If this is the current node  
         {
-            g.setColor(new Color(0, 200, 0);
+            g.setColor(new Color(0, 200, 0));
             g.fillRect(nodeX, nodeY, 45, 25);
         }
 
@@ -66,7 +66,7 @@ public class Node2 extends Node
 			if (children[i] instanceof Node2) // if the child is a Node2
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX(g.getWidth()) + 12,
+						   children[i].coord.getX(g.getWidth() + 12),
 						   children[i].coord.getY(g.getHeight()));
 			}
 			else if (children[i] instanceof Node3) // if the child is a Node3

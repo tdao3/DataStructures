@@ -1,3 +1,8 @@
+/*
+Team: 2-3-4 Trio
+Members: TO, TD, AB
+*/
+
 public class ScaledPoint
 {
 	// static variables given starting values, MUST be updated

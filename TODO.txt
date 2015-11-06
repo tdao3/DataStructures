@@ -1,11 +1,5 @@
-1) Create a similiar absorb method for the Node3 class
+1) comment pre post for constructors
 
-2) Either update child ptrs' parents of the new absorbed node inside the absorbNode method 
-or create a separate method to do that
-
-3) comment pre post for constructors
-
-4) Create a small driver to see if this even works
 
 
 

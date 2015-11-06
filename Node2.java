@@ -5,7 +5,7 @@ public class Node2 extends Node
 {
 	public Node2()
     //POST: A default Node2 object is created with a key set to 1, child nodes and
-	//      parent node set to null.
+	//      parent node set to null, and coordinates of 0,0.
     {
         this(1, null, null, new ScaledPoint(0, 0)); 
     }
@@ -14,7 +14,8 @@ public class Node2 extends Node
     //PRE: key, and parent initialized. children initialized with 2 initialized 
     //     pointers in the array, and coord is initialized.
     //POST: A Node2 object is created with a key set to key, child nodes set to 
-    //      corresponding pointers in children, and a parent node set to parent.
+    //      corresponding pointers in children, a parent node set to parent,
+    //      and coordinates set to coord.
     {
     	int counter;           //counter for for loop
 
@@ -37,7 +38,7 @@ public class Node2 extends Node
 
     //@Override
     public void drawNode(Graphics g, boolean selected) 
-    //PRE: g and selected is initialized.
+    //PRE: g and selected are initialized.
     //POST: a rectangle node is drawn  and its color is
     //      based on whether this node is the current node in the step
     //      process.
@@ -45,8 +46,8 @@ public class Node2 extends Node
     	int nodeX;     // x coord of top left corner of node
     	int nodeY;     // y coord of top left corner of node
     	
-    	nodeX = coord.getX(g.getWidth());
-    	nodeY = coord.getY(g.getHeight());
+    	nodeX = coord.getX();
+    	nodeY = coord.getY();
     	
         if(selected)    //If this is the current node  
         {
@@ -59,27 +60,27 @@ public class Node2 extends Node
         g.drawRect(nodeX, nodeY, 45, 25);
         
         //Draw the key inside the rectangle.
-        g.drawString(keys[0], nodeX + 2, nodeY + 12);
+        g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 12);
         
         for(int i = 0; i < children.length; i++) // iterate through children
 		{
 			if (children[i] instanceof Node2) // if the child is a Node2
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX(g.getWidth() + 12),
-						   children[i].coord.getY(g.getHeight()));
+						   children[i].coord.getX()+ 12,
+						   children[i].coord.getY();
 			}
 			else if (children[i] instanceof Node3) // if the child is a Node3
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX(g.getWidth()) + 25,
-						   children[i].coord.getY(g.getHeight()));
+						   children[i].coord.getX() + 25,
+						   children[i].coord.getY();
 			}
 			else if (children[i] instanceof Node4) // if the child is a Node4
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX(g.getWidth()) + 37,
-						   children[i].coord.getY(g.getHeight()));
+						   children[i].coord.getX() + 37,
+						   children[i].coord.getY();
 			}
 		}
     }

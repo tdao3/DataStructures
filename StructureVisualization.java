@@ -92,14 +92,23 @@ public class StructureVisualization extends JApplet implements ActionListener
         
         
         // testing drawing nodes
-        nodes = new Node[5];
+        nodes = new Node[13];
         
         // initialize 5 nodes, where the 5th is the parent of the other 4 nodes
-        nodes[0] = new Node2(5, new Node[]{null, null}, null, new ScaledPoint(.1, .9));
-        nodes[1] = new Node2(8, new Node[]{null, null}, null, new ScaledPoint(.3, .9));
-        nodes[2] = new Node2(10, new Node[]{null, null}, null, new ScaledPoint(.5, .9));
-        nodes[3] = new Node3(new int[]{18, 19}, new Node[]{null, null, null}, null, new ScaledPoint(.7, .9));
-        nodes[4] = new Node4(new int[]{6, 9, 11}, 
+        nodes[5] = new Node2(-125, new Node[]{null, null}, null, new ScaledPoint());
+        nodes[6] = new Node2(-80, new Node[]{null, null}, null, new ScaledPoint());
+        nodes[7] = new Node2(-60, new Node[]{null, null}, null, new ScaledPoint());
+        nodes[8] = new Node2(-40, new Node[]{null, null}, null, new ScaledPoint());
+        nodes[9] = new Node2(40, new Node[]{null, null}, null, new ScaledPoint());
+        nodes[10] = new Node2(60, new Node[]{null, null}, null, new ScaledPoint());
+        nodes[11] = new Node2(80, new Node[]{null, null}, null, new ScaledPoint());
+        nodes[12] = new Node2(125, new Node[]{null, null}, null, new ScaledPoint());
+        
+        nodes[0] = new Node2(-100, new Node[]{nodes[5], nodes[6]}, null, new ScaledPoint(.1, .9));
+        nodes[1] = new Node2(-50, new Node[]{nodes[7], nodes[8]}, null, new ScaledPoint(.3, .9));
+        nodes[2] = new Node2(50, new Node[]{nodes[9], nodes[10]}, null, new ScaledPoint(.5, .9));
+        nodes[3] = new Node2(100, new Node[]{nodes[11], nodes[12]}, null, new ScaledPoint(.7, .9));
+        nodes[4] = new Node4(new int[]{-75, 0, 75}, 
                              new Node[]{nodes[0], nodes[1], nodes[2], nodes[3]},
                              null, new ScaledPoint(.5, .5));
         
@@ -107,6 +116,10 @@ public class StructureVisualization extends JApplet implements ActionListener
         for(Node n : nodes[4].getChildren())
         {
             n.setParent(nodes[4]);
+            for(Node m : n.getChildren())
+            {
+                m.setParent(n);
+            }
         }
         
         current = nodes[4];
@@ -120,6 +133,8 @@ public class StructureVisualization extends JApplet implements ActionListener
         // change the size of the window in ScaledPoint to the current size
         ScaledPoint.setWindowSize(getWidth(), getHeight());
         
+        nodes[4].getSubtreeWidths();
+        nodes[4].repositionNodes();
         // iterate through the test nodes array and draw nodes
         for(Node n : nodes)
         {

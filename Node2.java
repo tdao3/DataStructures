@@ -3,6 +3,8 @@ import java.awt.Color;
 
 public class Node2 extends Node
 {
+    public static final int WIDTH = 50; // width of this node
+    
 	public Node2()
     //POST: A default Node2 object is created with a key set to 1, child nodes and
 	//      parent node set to null, and coordinates of 0,0.
@@ -15,7 +17,7 @@ public class Node2 extends Node
     //     pointers in the array, and coord is initialized.
     //POST: A Node2 object is created with a key set to key, child nodes set to 
     //      corresponding pointers in children, a parent node set to parent,
-    //      and coordinates set to coord.
+    //      and coordinates set to coord, and subtreeWidth initialized to 0
     {
     	int counter;           //counter for for loop
 
@@ -34,6 +36,7 @@ public class Node2 extends Node
         
 		this.coord = coord;
 		
+		subtreeWidth = 0;
     }
 
     //@Override
@@ -52,34 +55,36 @@ public class Node2 extends Node
         if(selected)    //If this is the current node  
         {
             g.setColor(new Color(120, 255, 120));
-            g.fillRect(nodeX, nodeY, 25, 25);
+            g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
         }
 
         //Draw a black rectangle border.
     	g.setColor(Color.BLACK);
-        g.drawRect(nodeX, nodeY, 25, 25);
+        g.drawRect(nodeX, nodeY, WIDTH, HEIGHT);
         
         //Draw the key inside the rectangle.
         g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);
         
+        
+        // draw lines to children of this node
         for(int i = 0; i < children.length; i++) // iterate through children
 		{
 			if (children[i] instanceof Node2) // if the child is a Node2
 			{
-				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX()+ 12,
+				g.drawLine(nodeX + (WIDTH*i), nodeY + HEIGHT,
+						   children[i].coord.getX()+ Node2.WIDTH/2,
 						   children[i].coord.getY());
 			}
 			else if (children[i] instanceof Node3) // if the child is a Node3
 			{
-				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX() + 25,
+				g.drawLine(nodeX + (WIDTH*i), nodeY + HEIGHT,
+						   children[i].coord.getX() + Node3.WIDTH/2,
 						   children[i].coord.getY());
 			}
 			else if (children[i] instanceof Node4) // if the child is a Node4
 			{
-				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX() + 37,
+				g.drawLine(nodeX + (WIDTH*i), nodeY + HEIGHT,
+						   children[i].coord.getX() + Node3.WIDTH/2,
 						   children[i].coord.getY());
 			}
 		}
@@ -149,4 +154,10 @@ public class Node2 extends Node
         }
     }
     
+    @Override
+    public int getNodeWidth()
+    // POST: FCTVAL == the width of a Node2
+    {
+        return WIDTH;
+    }
 }

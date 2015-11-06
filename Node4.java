@@ -3,6 +3,8 @@ import java.awt.Color;
 
 public class Node4 extends Node
 {
+    public static final int WIDTH = 150; // width of this node
+    
     public Node4()
     // POST: a new Node4 is created with keys of {1, 2, 3} and children 
     //       of {null, null, null, null}
@@ -16,7 +18,8 @@ public class Node4 extends Node
     //       4 with 4 initialized Nodes in it. parent is null if the node has no
     //       parent, or otherwise is initialized.
     // POST: a new Node4 is created with class member keys, children, and parent equal to 
-    //       the parameters keys, children and parent, respectively
+    //       the parameters keys, children and parent, respectively and subtreeWidth 
+    //       initialized to 0. class member coord set to coord
     {
         this.keys = new int[3];         // allocate the array of keys
         this.children = new Node[4];
@@ -43,8 +46,10 @@ public class Node4 extends Node
         }
         
         this.parent = parent;
-		
-		this.coord = coord;
+        
+        this.coord = coord;
+        
+        subtreeWidth = 0;
     }
     
     public void drawNode(Graphics g, boolean selected)
@@ -53,58 +58,58 @@ public class Node4 extends Node
     //      and its color is based on whether this node is the current node 
     //      in the step process.
     {
-		
-		int nodeX;		// x coord of top left corner of node
-		int nodeY;		// y coord of top left corner of node
-		
-		// get the drawing coordinates of the node at this window size
-		
-		nodeX = coord.getX();
-		nodeY = coord.getY();
-		
-		if(selected)
-		{
-			g.setColor(new Color(120, 255, 120)); // selected so set to light green
-			g.fillRect(nodeX, nodeY, 75, 25); // fill background green
-		}
-		
-		g.setColor(Color.BLACK);
-		g.drawRect(nodeX, nodeY, 75, 25); // draw black border
-		
-		// draw first divider
-		g.drawLine(nodeX + 25, nodeY,
-				   nodeX + 25, nodeY + 25);
-		
-		// draw second divider
-		g.drawLine(nodeX + 50, nodeY,
-				   nodeX + 50, nodeY + 25);
-		
-		// draw numbers of 3 keys
-		g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);
-		g.drawString(Integer.toString(keys[1]), nodeX + 27, nodeY + 15);
-		g.drawString(Integer.toString(keys[2]), nodeX + 52, nodeY + 15);
-		
-		for(int i = 0; i < children.length; i++) // iterate through children
-		{
-			if (children[i] instanceof Node2) // if the child is a Node2
-			{
-				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX() + 12,
-						   children[i].coord.getY());
-			}
-			else if (children[i] instanceof Node3) // if the child is a Node3
-			{
-				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX() + 25,
-						   children[i].coord.getY());
-			}
-			else if (children[i] instanceof Node4) // if the child is a Node4
-			{
-				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX() + 37,
-						   children[i].coord.getY());
-			}
-		}
+        
+        int nodeX;      // x coord of top left corner of node
+        int nodeY;      // y coord of top left corner of node
+        
+        // get the drawing coordinates of the node at this window size
+        
+        nodeX = coord.getX();
+        nodeY = coord.getY();
+        
+        if(selected)
+        {
+            g.setColor(new Color(120, 255, 120)); // selected so set to light green
+            g.fillRect(nodeX, nodeY, WIDTH, HEIGHT); // fill background green
+        }
+        
+        g.setColor(Color.BLACK);
+        g.drawRect(nodeX, nodeY, WIDTH, HEIGHT); // draw black border
+        
+        // draw first divider
+        g.drawLine(nodeX + WIDTH/3, nodeY,
+                   nodeX + WIDTH/3, nodeY + HEIGHT);
+        
+        // draw second divider
+        g.drawLine(nodeX + 2*WIDTH/3, nodeY,
+                   nodeX + 2*WIDTH/3, nodeY + HEIGHT);
+        
+        // draw numbers of 3 keys
+        g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);
+        g.drawString(Integer.toString(keys[1]), nodeX + (WIDTH/3) + 2, nodeY + 15);
+        g.drawString(Integer.toString(keys[2]), nodeX + (2* WIDTH/3) + 2, nodeY + 15);
+        
+        for(int i = 0; i < children.length; i++) // iterate through children
+        {
+            if (children[i] instanceof Node2) // if the child is a Node2
+            {
+                g.drawLine(nodeX + ((WIDTH/3)*i), nodeY + HEIGHT,
+                           children[i].coord.getX() + (Node2.WIDTH/2),
+                           children[i].coord.getY());
+            }
+            else if (children[i] instanceof Node3) // if the child is a Node3
+            {
+                g.drawLine(nodeX + ((WIDTH/3)*i), nodeY + HEIGHT,
+                           children[i].coord.getX() + (Node3.WIDTH/2),
+                           children[i].coord.getY());
+            }
+            else if (children[i] instanceof Node4) // if the child is a Node4
+            {
+                g.drawLine(nodeX + ((WIDTH/3)*i), nodeY + HEIGHT,
+                           children[i].coord.getX() + (Node4.WIDTH/2),
+                           children[i].coord.getY());
+            }
+        }
     }
 
     public Node findPath(int n)
@@ -137,11 +142,7 @@ public class Node4 extends Node
     //       Node of the two child Node2
     {
         // creating 3 new Node2 by splitting the Node4
-<<<<<<< HEAD
-        
-=======
         // scalepoint set to null for now 
->>>>>>> origin/master
         Node2 lChild = new Node2(keys[0], new Node[]{children[0], children[1]}, null, null);
         Node2 rChild = new Node2(keys[2], new Node[]{children[2], children[3]}, null, null);
         Node2 newParent = new Node2(keys[1], new Node[]{lChild, rChild}, null, null);
@@ -151,16 +152,23 @@ public class Node4 extends Node
         
         if(parent != null) // this is not the root node
         {
-        	if(parent instanceof Node2)  //If the parent is a Node2 object
-        	{
+            if(parent instanceof Node2)  //If the parent is a Node2 object
+            {
                 return ((Node2)(parent)).absorbNode(newParent);
-        	}
-        	else   //If the parent is a Node3 object
-        	{
-        	    return ((Node3)(parent)).absorbNode(newParent);
-        	}
+            }
+            else   //If the parent is a Node3 object
+            {
+                return ((Node3)(parent)).absorbNode(newParent);
+            }
         }
         // otherwise just return the newParent node
         return newParent;
+    }
+    
+    @Override
+    public int getNodeWidth()
+    // POST: FCTVAL == the width of a Node4
+    {
+        return WIDTH;
     }
 }

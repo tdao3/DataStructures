@@ -2,10 +2,16 @@ import java.awt.Graphics;
 
 public abstract class Node
 {
+    public static final int NODE_SPACING_X = 15; // width between drawn nodes
+    public static final int NODE_SPACING_Y = 25;
+    public static final int HEIGHT = 50;  // height of all nodes
+    
     protected int[] keys;         // the keys (1, 2, or 3) of the node
     protected Node[] children;    // the children (2, 3, or 4) of the node
     protected Node parent;        // the parent of this node (null if root)
 
+    protected int subtreeWidth;   // used for spacing nodes in drawing
+    
     protected ScaledPoint coord;
 
     public abstract void drawNode(Graphics g, boolean selected);      // subclasses draws the corresponding node 
@@ -13,19 +19,21 @@ public abstract class Node
     public abstract Node findPath(int n);           // subclasses finds path taken to get 
                                                     // to node being searched
     
+    public abstract int getNodeWidth();             // returns the width of the type of node                                           
+                                                    
     public void setParent(Node parent)
     // PRE:  parent is null if no parent or is initialized otherwise
     // POST: class member parent equals the parameter Node parent
     {
         this.parent = parent;
     }
-	
-	public void setCoord(ScaledPoint coord)
-	// PRE:  coord is initialized
-	// POST: class member coord is set to the parameter coord
-	{
-		this.coord = coord;
-	}
+    
+    public void setCoord(ScaledPoint coord)
+    // PRE:  coord is initialized
+    // POST: class member coord is set to the parameter coord
+    {
+        this.coord = coord;
+    }
     
     public void updateChildPtr(Node oldChild, Node newChild)
     // PRE:  oldChild and newChild are initialized
@@ -74,6 +82,19 @@ public abstract class Node
         }
     }
     
+    public boolean isRoot()
+    // POST: FCTVAL == TRUE if parent is null, FALSE otherwise
+    {
+        if(parent == null) // if the node has no parent
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
     public int[] getKeys()
     // POST: FCTVAL == an int[] keys of this Node
     {
@@ -90,5 +111,85 @@ public abstract class Node
     // POST: FCTVAL == the parent of this Node
     {
         return parent;
+    }
+    
+    public int getSubtreeWidths()
+    // POST: FCTVAL == the width of the subtree of the Node that this method
+    //       is invoked upon. Also, subtreeWidth is set to the sum of the childrens
+    //       subtrees, or the width of the Node(if isLeaf)
+    {
+        if(isLeaf())
+        {
+            subtreeWidth = getNodeWidth();
+            return subtreeWidth;
+        }
+        else
+        {
+            subtreeWidth = NODE_SPACING_X/2; // start as a buffer value for left spacing
+            
+            // iterate through each child and find and add childs subtreeWidth
+            // plus a buffer value to space out the nodes
+            for(Node n : children)
+            {
+                subtreeWidth += n.getSubtreeWidths() + NODE_SPACING_X;
+            }
+            
+            subtreeWidth -= NODE_SPACING_X/2;
+            // subtract half of the buffer distance on right side
+            return subtreeWidth;
+        }
+    }
+    
+    public void repositionNodes()
+    // PRE:  to be used after getSubtreeWidths() has updated the subtreeWidth 
+    //       of each Node
+    // POST: repositions all the nodes of the tree from top down so they are 
+    //       evenly spaced. 
+    {
+        int totalChildrenWidth; // width of the node's children's subtrees
+        int subtreeStartX;      // the x coordinate of the leftmost corner of
+                                // this node's subtree
+        
+        int currentX;           // used during the repositioning of the children
+                                // of this node.
+                                
+        totalChildrenWidth = 0; // begins at zero before adding up
+        
+        if(isRoot())            // if this node is the root set at specific position
+        {
+            // set it at the top middle of the screen
+            coord = new ScaledPoint(.5, .25);
+            // shift over slightly so it is centered on screen
+            coord.setX(coord.getX() - (getNodeWidth()/2));
+        }
+        
+        if(!isLeaf())      // if this node is not a leaf then position its children
+        {
+            //for(Node n : children) // iterate through children adding up their subtreeWidths
+            //{
+            //    totalChildrenWidth += n.subtreeWidth;
+            //}
+            
+            // the start is the top left corner of this node, minus half the width of the children
+            // plus half of the width of this node to center it again
+            subtreeStartX = (coord.getX() + (getNodeWidth()/2)) - (subtreeWidth / 2);
+            
+            currentX = subtreeStartX + NODE_SPACING_X/2; // given initial leftside buffer
+            for(Node n : children) // iterate through children and position them
+            {
+                n.coord.setX(currentX + (n.subtreeWidth/2) - (n.getNodeWidth()/2));
+                n.coord.setY(coord.getY() + HEIGHT + NODE_SPACING_Y);
+                
+                currentX += n.subtreeWidth + NODE_SPACING_X;
+                
+                n.repositionNodes(); // once this child's position is set, 
+                                     // position this child's children
+            }
+            
+        }
+        
+        
+        // if it is a leaf and not the root then there is nothing for the node to do
+        // it will already be in the right position
     }
 }

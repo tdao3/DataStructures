@@ -47,7 +47,7 @@ public class ScaledPoint
 		this.y = ((double)y / windowHeight);
 	}
 
-	public void setWindowSize(int width, int height)
+	public static void setWindowSize(int width, int height)
 	// PRE:  width and height are both greater than 0, and are the 
 	//		 current width of the window to be drawn in (for correctness
 	//		 of output of the getX() and getY() methods

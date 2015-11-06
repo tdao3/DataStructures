@@ -51,16 +51,16 @@ public class Node2 extends Node
     	
         if(selected)    //If this is the current node  
         {
-            g.setColor(new Color(0, 200, 0));
-            g.fillRect(nodeX, nodeY, 45, 25);
+            g.setColor(new Color(120, 255, 120));
+            g.fillRect(nodeX, nodeY, 25, 25);
         }
 
         //Draw a black rectangle border.
     	g.setColor(Color.BLACK);
-        g.drawRect(nodeX, nodeY, 45, 25);
+        g.drawRect(nodeX, nodeY, 25, 25);
         
         //Draw the key inside the rectangle.
-        g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 12);
+        g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);
         
         for(int i = 0; i < children.length; i++) // iterate through children
 		{

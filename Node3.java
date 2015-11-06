@@ -55,13 +55,13 @@ public class Node3 extends Node
     	if(selected)
     	{
     		g.setColor(new Color(120,255,120));	//when node is selected border is green
-    	    g.fillRect(nodeX, nodeY, 75, 23);
+    	    g.fillRect(nodeX, nodeY, 50, 25);
 
     	}
     
     	g.setColor(Color.BLACK);			//sets color to normally be black
 
-    	g.drawRect(nodeX, nodeY, 50, 5);	//draws the actual node 
+    	g.drawRect(nodeX, nodeY, 50, 25);	//draws the actual node 
 
     	g.drawLine(nodeX + 25, nodeY,		
     				nodeX + 25, nodeY + 25);

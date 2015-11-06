@@ -27,6 +27,9 @@ public class StructureVisualization extends JApplet implements ActionListener
     private int drawAreaHeight;          // Height of JPanel drawingArea used for drawing tree
     private int drawAreaWidth;           // Width of JPanel drawingArea  used for drawing tree
     
+    private Node[] nodes;
+    private Node current;
+    
     public void init()
     {
         //Set the original GUI size.
@@ -86,14 +89,44 @@ public class StructureVisualization extends JApplet implements ActionListener
         add(buttonPanelSection, BorderLayout.NORTH);
         add(drawingArea, BorderLayout.CENTER);
        
+        
+        
+        // testing drawing nodes
+        nodes = new Node[5];
+        
+        // initialize 5 nodes, where the 5th is the parent of the other 4 nodes
+        nodes[0] = new Node2(5, new Node[]{null, null}, null, new ScaledPoint(.1, .9));
+        nodes[1] = new Node2(8, new Node[]{null, null}, null, new ScaledPoint(.3, .9));
+        nodes[2] = new Node2(10, new Node[]{null, null}, null, new ScaledPoint(.5, .9));
+        nodes[3] = new Node3(new int[]{18, 19}, new Node[]{null, null, null}, null, new ScaledPoint(.7, .9));
+        nodes[4] = new Node4(new int[]{6, 9, 11}, 
+                             new Node[]{nodes[0], nodes[1], nodes[2], nodes[3]},
+                             null, new ScaledPoint(.5, .5));
+        
+        // set parent pointer of the children nodes to the parent created
+        for(Node n : nodes[4].getChildren())
+        {
+            n.setParent(nodes[4]);
+        }
+        
+        current = nodes[4];
     }
     
     //Paint the GUI, and gets the graphics object.   
     public void paint(Graphics g)
     {
         super.paint(g);    
+        
+        // change the size of the window in ScaledPoint to the current size
+        ScaledPoint.setWindowSize(getWidth(), getHeight());
+        
+        // iterate through the test nodes array and draw nodes
+        for(Node n : nodes)
+        {
+            n.drawNode(g, (current == n)); // boolean to see if this node is the current
+        }
     }
-	
+    
     @Override
     public void actionPerformed(ActionEvent e) 
     {

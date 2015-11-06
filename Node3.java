@@ -1,3 +1,8 @@
+/*
+Team: 2-3-4 Trio
+Members: TO, TD, AB
+*/
+
 import java.awt.Graphics;
 import java.awt.Color;
 

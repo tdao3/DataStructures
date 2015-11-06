@@ -1,3 +1,9 @@
+/*
+Team: 2-3-4 Trio
+Members: TO, TD, AB
+*/
+
+
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;

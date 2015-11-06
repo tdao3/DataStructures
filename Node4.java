@@ -48,20 +48,23 @@ public class Node4 extends Node
     }
     
     public void drawNode(Graphics g, boolean selected)
+    //PRE: g and selected are initialized.
+    //POST: a rectangle 4 node and connector lines to its children are drawn
+    //      and its color is based on whether this node is the current node 
+    //      in the step process.
     {
-        // 4: [ | | ] 3: [ | ] 2: [ ] 
 		
 		int nodeX;		// x coord of top left corner of node
 		int nodeY;		// y coord of top left corner of node
 		
 		// get the drawing coordinates of the node at this window size
 		
-		nodeX = coord.getX(g.getWidth());
-		nodeY = coord.getY(g.getHeight());
+		nodeX = coord.getX();
+		nodeY = coord.getY();
 		
 		if(selected)
 		{
-			g.setColor(120, 255, 120); // selected so set to light green
+			g.setColor(new Color(120, 255, 120)); // selected so set to light green
 			g.fillRect(nodeX, nodeY, 75, 25); // fill background green
 		}
 		
@@ -77,29 +80,29 @@ public class Node4 extends Node
 				   nodeX + 50, nodeY + 25);
 		
 		// draw numbers of 3 keys
-		g.drawString(keys[0], nodeX + 2, nodeY + 15);
-		g.drawString(keys[1], nodeX + 27, nodeY + 15);
-		g.drawString(keys[2], nodeX + 52, nodeY + 15);
+		g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);
+		g.drawString(Integer.toString(keys[1]), nodeX + 27, nodeY + 15);
+		g.drawString(Integer.toString(keys[2]), nodeX + 52, nodeY + 15);
 		
 		for(int i = 0; i < children.length; i++) // iterate through children
 		{
 			if (children[i] instanceof Node2) // if the child is a Node2
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX(g.getWidth()) + 12,
-						   children[i].coord.getY(g.getHeight()));
+						   children[i].coord.getX() + 12,
+						   children[i].coord.getY());
 			}
 			else if (children[i] instanceof Node3) // if the child is a Node3
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX(g.getWidth()) + 25,
-						   children[i].coord.getY(g.getHeight()));
+						   children[i].coord.getX() + 25,
+						   children[i].coord.getY());
 			}
 			else if (children[i] instanceof Node4) // if the child is a Node4
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
-						   children[i].coord.getX(g.getWidth()) + 37,
-						   children[i].coord.getY(g.getHeight()));
+						   children[i].coord.getX() + 37,
+						   children[i].coord.getY());
 			}
 		}
     }

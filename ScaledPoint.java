@@ -1,5 +1,10 @@
 public class ScaledPoint
 {
+	// static variables given starting values, MUST be updated
+	// when paint() is called always
+	private static int windowWidth = 600;	// total width of the window ScaledPoint refers to
+	private static int windowHeight = 400;	// total height of the window ScaledPoint refers to
+
 	private double x;					// percentage width across window
 	private double y;					// percentage height across window
 	
@@ -42,17 +47,28 @@ public class ScaledPoint
 		this.y = ((double)y / height);
 	}
 
-	public int getX(int width)
-	// PRE:  width > 0
-	// POST: FCTVAL == class member x * width
+	public void setWindowSize(int width, int height)
+	// PRE:  width and height are both greater than 0, and are the 
+	//		 current width of the window to be drawn in (for correctness
+	//		 of output of the getX() and getY() methods
 	{
-		return (int)(x * width);
+		windowWidth = width;
+		windowHeight = height;
 	}
 	
-	public int getY(int height)
-	// PRE:  height > 0
-	// POST: FCTVAL == class member y * height
+	public int getX()
+	// PRE:  windowWidth is updated to the current height of the window
+	//		 where this pixel value is being used to paint
+	// POST: FCTVAL == class member x * windowWidth
 	{
-		return (int)(y * height);
+		return (int)(x * windowWidth);
+	}
+	
+	public int getY()
+	// PRE:  windowHeight is updated to the current height of the window
+	//		 where this pixel value is being used to paint
+	// POST: FCTVAL == class member y * windowHeight
+	{
+		return (int)(y * windowHeight);
 	}
 }

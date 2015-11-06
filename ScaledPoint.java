@@ -33,18 +33,18 @@ public class ScaledPoint
 		this.y = ((double)y / height);
 	}
 	
-	public void setX(int x, int width)
-	// PRE:  0 <= x <= width
-	// POST: class member x is set to the percentage (x/width)
+	public void setX(int x)
+	// PRE:  0 <= x <= windowWidth
+	// POST: class member x is set to the percentage (x/windowWidth)
 	{
-		this.x = ((double)x / width);
+		this.x = ((double)x / windowWidth);
 	}
 	
-	public void setY(int y, int height)
-	// PRE:  0 <= y <= height
-	// POST: class member y is set to the percentage (y/height)
+	public void setY(int y)
+	// PRE:  0 <= y <= windowHeight
+	// POST: class member y is set to the percentage (y/windowHeight)
 	{
-		this.y = ((double)y / height);
+		this.y = ((double)y / windowHeight);
 	}
 
 	public void setWindowSize(int width, int height)

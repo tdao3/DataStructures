@@ -137,10 +137,10 @@ public class Node4 extends Node
     //       Node of the two child Node2
     {
         // creating 3 new Node2 by splitting the Node4
-        
-        Node2 lChild = new Node2(keys[0], new Node[]{children[0], children[1]}, null);
-        Node2 rChild = new Node2(keys[2], new Node[]{children[2], children[3]}, null);
-        Node2 newParent = new Node2(keys[1], new Node[]{lChild, rChild}, null);
+        // scalepoint set to null for now 
+        Node2 lChild = new Node2(keys[0], new Node[]{children[0], children[1]}, null, null);
+        Node2 rChild = new Node2(keys[2], new Node[]{children[2], children[3]}, null, null);
+        Node2 newParent = new Node2(keys[1], new Node[]{lChild, rChild}, null, null);
         
         lChild.setParent(newParent);
         rChild.setParent(newParent);

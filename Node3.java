@@ -40,6 +40,10 @@ public class Node3 extends Node
 	}
 
 	public void drawNode(Graphics g, boolean selected)
+	//PRE: g and selected are initialized.
+    //POST: a rectangle 3 node and connector lines to its children are drawn
+    //      and its color is based on whether this node is the current node 
+    //      in the step process.
     {
     	int nodeX; 		//x coord of top left corner of node
     	int nodeY;		//y coord of top left corner of node

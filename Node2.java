@@ -68,19 +68,19 @@ public class Node2 extends Node
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
 						   children[i].coord.getX()+ 12,
-						   children[i].coord.getY();
+						   children[i].coord.getY());
 			}
 			else if (children[i] instanceof Node3) // if the child is a Node3
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
 						   children[i].coord.getX() + 25,
-						   children[i].coord.getY();
+						   children[i].coord.getY());
 			}
 			else if (children[i] instanceof Node4) // if the child is a Node4
 			{
 				g.drawLine(nodeX + (25*i), nodeY + 25,
 						   children[i].coord.getX() + 37,
-						   children[i].coord.getY();
+						   children[i].coord.getY());
 			}
 		}
     }

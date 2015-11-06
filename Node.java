@@ -8,7 +8,7 @@ public abstract class Node
 
     protected ScaledPoint coord;
 
-    public abstract void drawNode(Graphics g);      // subclasses draws the corresponding node 
+    public abstract void drawNode(Graphics g, boolean selected);      // subclasses draws the corresponding node 
 
     public abstract Node findPath(int n);           // subclasses finds path taken to get 
                                                     // to node being searched
@@ -64,7 +64,7 @@ public abstract class Node
         // iterate through children to see if any aren't null
         // there should really be only 2 cases, all children are null or no children are null
         
-        if(children[0] == null) // if the child doesnt exists
+        if(children[0] == null) // if the child doesn't exists
         {
             return true; 
         }

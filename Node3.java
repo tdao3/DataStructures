@@ -46,12 +46,12 @@ public class Node3 extends Node
 
     	//grabbing coordinates of the node 
     	nodeX = coord.getX();
-    	nodeY = coord.getX();
+    	nodeY = coord.getY();
 
     	if(selected)
     	{
     		g.setColor(new Color(120,255,120));	//when node is selected border is green
-    	    g.fillRect(coord.getX(), coord.getY(), 75, 23);
+    	    g.fillRect(nodeX, nodeY, 75, 23);
 
     	}
     
@@ -59,7 +59,7 @@ public class Node3 extends Node
 
     	g.drawRect(nodeX, nodeY, 50, 5);	//draws the actual node 
 
-    	g.drawLine(nodeX + 25, nodeY + 25,		
+    	g.drawLine(nodeX + 25, nodeY,		
     				nodeX + 25, nodeY + 25);
 		
     	g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);		//draws 2 keys and distance between keys
@@ -69,9 +69,22 @@ public class Node3 extends Node
     	{
     		if(children[i] instanceof Node2)				//if child is a 2 Node 
     		{
-    			g.drawLine(nodeX + (25*i), nodeY + 25, children[i].coord.getX() + 12,
-    			children[i].coord.getY();
+    			g.drawLine(nodeX + (25*i), nodeY + 25, 
+						   children[i].coord.getX() + 12,
+						   children[i].coord.getY());
     		}
+			else if (children[i] instanceof Node3) // if the child is a Node3
+			{
+				g.drawLine(nodeX + (25*i), nodeY + 25,
+						   children[i].coord.getX() + 25,
+						   children[i].coord.getY());
+			}
+			else if (children[i] instanceof Node4) // if the child is a Node4
+			{
+				g.drawLine(nodeX + (25*i), nodeY + 25,
+						   children[i].coord.getX() + 37,
+						   children[i].coord.getY());
+			}
     	}
     }
 

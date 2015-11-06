@@ -39,9 +39,9 @@ public class Node2 extends Node
     //@Override
     public void drawNode(Graphics g, boolean selected) 
     //PRE: g and selected are initialized.
-    //POST: a rectangle node is drawn  and its color is
-    //      based on whether this node is the current node in the step
-    //      process.
+    //POST: a rectangle 2 node and connector lines to its children are drawn
+    //      and its color is based on whether this node is the current node 
+    //      in the step process.
     {
     	int nodeX;     // x coord of top left corner of node
     	int nodeY;     // y coord of top left corner of node

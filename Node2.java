@@ -68,7 +68,7 @@ public class Node2 extends Node
         g.drawRect(nodeX, nodeY, WIDTH, HEIGHT);
         
         //Draw the key inside the rectangle.
-        g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);
+        g.drawString(Integer.toString(keys[0]), nodeX + 4, nodeY + (HEIGHT/2) + 4);
         
         
         // draw lines to children of this node

@@ -103,12 +103,12 @@ public class StructureVisualization extends JApplet implements ActionListener
         // initialize 5 nodes, where the 5th is the parent of the other 4 nodes
         nodes[5] = new Node2(-125, new Node[]{null, null}, null, new ScaledPoint());
         nodes[6] = new Node2(-80, new Node[]{null, null}, null, new ScaledPoint());
-        nodes[7] = new Node2(-60, new Node[]{null, null}, null, new ScaledPoint());
+        nodes[7] = new Node3(new int[]{-60, -55}, new Node[]{null, null, null}, null, new ScaledPoint());
         nodes[8] = new Node2(-40, new Node[]{null, null}, null, new ScaledPoint());
         nodes[9] = new Node2(40, new Node[]{null, null}, null, new ScaledPoint());
         nodes[10] = new Node2(60, new Node[]{null, null}, null, new ScaledPoint());
         nodes[11] = new Node2(80, new Node[]{null, null}, null, new ScaledPoint());
-        nodes[12] = new Node2(125, new Node[]{null, null}, null, new ScaledPoint());
+        nodes[12] = new Node3(new int[]{125, 130}, new Node[]{null, null, null}, null, new ScaledPoint());
         
         nodes[0] = new Node2(-100, new Node[]{nodes[5], nodes[6]}, null, new ScaledPoint(.1, .9));
         nodes[1] = new Node2(-50, new Node[]{nodes[7], nodes[8]}, null, new ScaledPoint(.3, .9));

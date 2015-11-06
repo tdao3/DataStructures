@@ -76,9 +76,10 @@ public class Node3 extends Node
         // draw dividing line in the middle of the node
         g.drawLine(nodeX + (WIDTH/2), nodeY,        
                     nodeX + (WIDTH/2), nodeY + HEIGHT);
-        
-        g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);     //draws 2 keys and distance between keys
-        g.drawString(Integer.toString(keys[1]), nodeX + (WIDTH/2) + 2, nodeY + 15);
+        //draws 2 keys and distance between keys
+
+        g.drawString(Integer.toString(keys[0]), nodeX + 4, nodeY + (HEIGHT/2) + 4);
+        g.drawString(Integer.toString(keys[1]), nodeX + (WIDTH/2) + 4, nodeY + (HEIGHT/2) + 4);
 
         // draw lines to children of this node
                 for(int i = 0; i < children.length; i++)            //go through children

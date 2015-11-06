@@ -90,9 +90,9 @@ public class Node4 extends Node
                    nodeX + 2*WIDTH/3, nodeY + HEIGHT);
         
         // draw numbers of 3 keys
-        g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);
-        g.drawString(Integer.toString(keys[1]), nodeX + (WIDTH/3) + 2, nodeY + 15);
-        g.drawString(Integer.toString(keys[2]), nodeX + (2* WIDTH/3) + 2, nodeY + 15);
+        g.drawString(Integer.toString(keys[0]), nodeX + 4, nodeY + (HEIGHT/2) + 4);
+        g.drawString(Integer.toString(keys[1]), nodeX + (WIDTH/3) + 4, nodeY + (HEIGHT/2) + 4);
+        g.drawString(Integer.toString(keys[2]), nodeX + (2* WIDTH/3) + 4, nodeY + (HEIGHT/2) + 4);
         
         for(int i = 0; i < children.length; i++) // iterate through children
         {

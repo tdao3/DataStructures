@@ -5,7 +5,8 @@ public class Node3 extends Node
 {
 	public Node3()
 	//POST: An object of Node3 is created with keys {1,2} 
-	//		and no parent or child values (both set to null)
+	//		and no parent or child values (both set to null). coordinates
+	//      of the node are set to 0,0.
 	{
 		this(new int[]{1,2}, null, null, new ScaledPoint(0, 0));
 	}
@@ -13,9 +14,9 @@ public class Node3 extends Node
 	public Node3(int[] keys, Node[] children, Node parent, ScaledPoint coord)
 	//PRE:	keys is an initialized array with exactly 2 values, children is a array
 	//		with exactly 3 values or is null meaning there is no children, parent is 
-	//		null if Node3 has no parent, otherwise initialized
+	//		null if Node3 has no parent, otherwise initialized. coord is initialized
 	//POST: a new Node3 is created with class members keys, children, and parent equal to parameters
-	//		keys, children and parent
+	//		keys, children and parent. coordinates of the node set to coord.
 	{
 		int i; 			//counter for loop
 
@@ -44,13 +45,13 @@ public class Node3 extends Node
     	int nodeY;		//y coord of top left corner of node
 
     	//grabbing coordinates of the node 
-    	nodeX = coord.getX(g.getWidth());
-    	nodeY = coord.getX(g.getHeight());
+    	nodeX = coord.getX();
+    	nodeY = coord.getX();
 
     	if(selected)
     	{
-    		g.setColor(120,255,120);	//when node is selected border is green
-    	    g.fillRect(coord.getX(g.getWidth()), coord.getY(g.getHeight()), 75, 23);
+    		g.setColor(new Color(120,255,120));	//when node is selected border is green
+    	    g.fillRect(coord.getX(), coord.getY(), 75, 23);
 
     	}
     
@@ -61,15 +62,15 @@ public class Node3 extends Node
     	g.drawLine(nodeX + 25, nodeY + 25,		
     				nodeX + 25, nodeY + 25);
 		
-    	g.drawString(keys[0], nodeX + 2, nodeY + 15);		//draws 2 keys and distance between keys
-    	g.drawString(keys[1], nodeX + 27, nodeY + 15);
+    	g.drawString(Integer.toString(keys[0]), nodeX + 2, nodeY + 15);		//draws 2 keys and distance between keys
+    	g.drawString(Integer.toString(keys[1]), nodeX + 27, nodeY + 15);
 
     	for(int i = 0; i < children.length; i++)			//go through children
     	{
     		if(children[i] instanceof Node2)				//if child is a 2 Node 
     		{
-    			g.drawLine(nodeX + (25*i), nodeY + 25, children[i].coord.getX(g.getWidth()) + 12,
-    			g.getHeight());
+    			g.drawLine(nodeX + (25*i), nodeY + 25, children[i].coord.getX() + 12,
+    			children[i].coord.getY();
     		}
     	}
     }

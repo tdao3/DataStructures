@@ -36,6 +36,8 @@ public class StructureVisualization extends JApplet implements ActionListener
     
     private boolean isSearch;            // True if user is searching through tree
                                          // false otherwise.
+    private boolean isInsert;            // Value true if user is inserting into the tree
+                                         // false otherwise.
     
     private Node[] nodes;                // Node array all nodes in the tree
     private Node current;                // Current node accessed
@@ -167,6 +169,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         
         nodes[4].getSubtreeWidths();
         nodes[4].repositionNodes();
+
         // iterate through the test nodes array and draw nodes
         for(Node n : nodes)
         {
@@ -189,6 +192,9 @@ public class StructureVisualization extends JApplet implements ActionListener
             }
         }
     	
+
+        /**************************SEARCH****************************/
+
         if(e.getSource() == searchButton)    //If search button is pressed
         {	
             if(inputValueField.getText().equals(""))  //If no input entered
@@ -233,13 +239,42 @@ public class StructureVisualization extends JApplet implements ActionListener
                     	  isSearch = false;
             		  }
             		  
-            		} catch (NumberFormatException d) {
+            		} 
+                    catch (NumberFormatException d) {
             			//Invalid input given
             			JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
             		}
             }
         }
+
+
+        /**************************INSERT****************************/
+
+        if(e.getSource() == insertButton)             //User clicked insert button 
+        {
+            if(inputValueField.getText().equals(""))  //If no input entered
+            {
+                JOptionPane.showMessageDialog(null, "You must enter in a value." );
+            }
+            else
+            {
+                // error checking for user input 
+                try
+                {
+                    inputValue = Integer.parseInt(inputValueField.getText());
+                }
+                catch (NumberFormatException d)
+                {
+                    //Invalid input given
+                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
+                }
+                
+                insert();   
+            }
+        }
         
+
+        /************************STEP AND FINISH*******************/
         if(e.getSource() == stepButton)   //If step button is pressed
         {
             if(isSearch)  //If user is searching
@@ -262,14 +297,14 @@ public class StructureVisualization extends JApplet implements ActionListener
                 finishButton.setEnabled(false);
                 stepButton.setEnabled(false);
                 insertButton.setEnabled(true);
-          	    deleteButton.setEnabled(true);
+                deleteButton.setEnabled(true);
             }
         }
-        
+
         repaint();
     }
     
-    
+
     public void stepSearch()
     {
         //Keep track of previous node
@@ -305,7 +340,7 @@ public class StructureVisualization extends JApplet implements ActionListener
             insertButton.setEnabled(true);
       	    deleteButton.setEnabled(true);
         }
-        validate();
+        validate(); //what does it this do????????????????????????
     }
     
     public void finishSearch()
@@ -332,6 +367,68 @@ public class StructureVisualization extends JApplet implements ActionListener
             JOptionPane.showMessageDialog(null, "The value " + inputValue + " has been found." );
         }
         validate();
+    }
+
+     public void insert() 
+    {
+        Node3 newNode3 = new Node3();
+        Node4 newNode4 = new Node4();
+
+        //Enable step and finish buttons
+        stepButton.setEnabled(true);
+        finishButton.setEnabled(true);
+          
+        //Disable insert and delete buttons
+        searchButton.setEnabled(false);
+        deleteButton.setEnabled(false);
+          
+        //User is searching tree
+        isInsert= true;
+
+        //Set first node 
+        current = root;
+
+        /* traverse through the tree and find where to insert */
+        while(current != null && !current.hasKey(inputValue))
+        {
+            if(current.findPath(inputValue) == null)
+            {
+                break;
+            }
+            //Keep track of previous node
+            previous = current;
+            
+            //Find the next node to traverse to
+            current = current.findPath(inputValue);
+        }
+        
+        // inserting in to different types of nodes 
+        if(current instanceof Node2)
+        {
+            newNode3 = ((Node2)current).insertNode(inputValue);  
+            previous.updateChildPtr(current, newNode3);     
+            current = newNode3;                 
+        }
+        else if (current instanceof Node3)
+        {
+            newNode4 = ((Node3)current).insertNode(inputValue);
+            previous.updateChildPtr(current, newNode4);
+            current = newNode4;
+        }
+        else if (current instanceof Node4)      //Node4 should never be inserted to
+        {
+            previous = ((Node4)current).splitNode4();   //splits 4Node
+
+            //FIX
+
+            insert();       // calls insert again since 4Node is now 2Nodes 
+        }
+
+        //Reset other buttons
+        stepButton.setEnabled(false);
+        finishButton.setEnabled(false);
+        searchButton.setEnabled(true);
+        deleteButton.setEnabled(true);  
     }
 
 }

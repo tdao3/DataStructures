@@ -1,4 +1,6 @@
 1) comment pre post for constructors
+2) Drawing for any of the inserts not working!!!
+3) Insert for node4 is giving errors 
 
 
 

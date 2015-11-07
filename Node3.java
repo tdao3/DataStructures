@@ -26,17 +26,16 @@ public class Node3 extends Node
     //      keys, children and parent. coordinates of the node set to coord,
     //      subtreeWidth set to 0, and lastNode set to false.
     {
-        int i;          //counter for loop
-
+    
         this.keys = new int[2];         //allocate array of keys 
-        this.children = new Node[4];    //allocate array of children
+        this.children = new Node[3];    //allocate array of children
 
         this.keys[0] = keys[0];         //keys set to parameter keys 
         this.keys[1] = keys[1];
 
         if(children != null)            //sets children to be children parameters 
         {   
-            for(i = 0; i < 3; i++)  
+            for(int i = 0; i < 3; i++)  
             {
                 this.children[i] = children[i];
             }
@@ -199,5 +198,43 @@ public class Node3 extends Node
     // POST: FCTVAL == the width of a Node3
     {
         return WIDTH;
+    }
+
+    public Node4 insertNode(int insertKey)
+    //PRE:  inserted is initialized
+    //POST: An object of Node3 is created with keys being a combination of the original key
+    //      and the new inserted key. The new object will have the same parent, children and
+    //      coord as the original node
+    {
+        //Create a new key array for the new values
+        int[] newKeys = new int[3];
+
+        //insert the keys in correct value order 
+        if(this.keys[0] < insertKey)            //new key is greater than first orig. key
+        {
+            if(this.keys[1] < insertKey)        //new key is greater than both orig. keys
+            {
+                newKeys[0] = this.keys[0];
+                newKeys[1] = this.keys[1];
+                newKeys[2] = insertKey;         //insert new key at the end 
+            }
+            else                                //new key is only greater than first key
+            {
+                newKeys[0] = this.keys[0];
+                newKeys[1] = insertKey;         //insert new key in the middle 
+                newKeys[2] = this.keys[1];
+            }
+        }
+        else                                    //new key is the smallest key 
+        {
+            newKeys[0] = insertKey;             //insert new key at the beginning 
+            newKeys[1] = this.keys[0];
+            newKeys[2] = this.keys[1];
+        }
+
+        // new now has 3 values, the same children, parent, and coord 
+        Node4 newNode = new Node4(newKeys, null, this.parent, this.coord);
+
+        return newNode;
     }
 }

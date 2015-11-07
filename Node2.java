@@ -173,4 +173,31 @@ public class Node2 extends Node
     {
         return WIDTH;
     }
+
+    public Node3 insertNode(int insertKey)
+    //PRE:  inserted is initialized
+    //POST: An object of Node3 is created with keys being a combination of the original key
+    //      and the new inserted key. The new object will have the same parent, children and
+    //      coord as the original node
+    {
+        //Create a new key array for the new values
+        int[] newKeys = new int[2];
+
+        //insert the keys in correct value order 
+        if(this.keys[0] < insertKey)      //insert key is greater than orig. key
+        {
+            newKeys[0] = this.keys[0];
+            newKeys[1] = insertKey;       //insert the key at the end 
+        }
+        else                              //orig. key is greater than the new key
+        {
+            newKeys[0] = insertKey;       //inser the key at the beginning 
+            newKeys[1] = this.keys[0];
+        }
+
+        // new now has 2 values, the same children, parent , and coord 
+        Node3 newNode = new Node3(newKeys, null, this.parent, this.coord);
+
+        return newNode;
+    }
 }

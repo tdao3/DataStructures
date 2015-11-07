@@ -11,8 +11,8 @@ public class Node4 extends Node
     public static final int WIDTH = 150; // width of this node
     
     public Node4()
-    // POST: a new Node4 is created with keys of {1, 2, 3} and children 
-    //       of {null, null, null, null}
+    // POST: a new Node4 is created with keys of {1, 2, 3}, children 
+    //       of {null, null, null, null}, and and lastNode set to false.
     {
         this(new int[]{1, 2, 3}, null, null, new ScaledPoint(0, 0));
     }
@@ -24,7 +24,7 @@ public class Node4 extends Node
     //       parent, or otherwise is initialized.
     // POST: a new Node4 is created with class member keys, children, and parent equal to 
     //       the parameters keys, children and parent, respectively and subtreeWidth 
-    //       initialized to 0. class member coord set to coord
+    //       initialized to 0. class member coord set to coord, and and lastNode set to false.
     {
         this.keys = new int[3];         // allocate the array of keys
         this.children = new Node[4];
@@ -54,6 +54,8 @@ public class Node4 extends Node
         
         this.coord = coord;
         
+        lastNode = false;
+        
         subtreeWidth = 0;
     }
     
@@ -61,7 +63,7 @@ public class Node4 extends Node
     //PRE: g and selected are initialized.
     //POST: a rectangle 4 node and connector lines to its children are drawn
     //      and its color is based on whether this node is the current node 
-    //      in the step process.
+    //      in the step process or the last node accessed in the stepping process.
     {
         
         int nodeX;      // x coord of top left corner of node
@@ -72,10 +74,15 @@ public class Node4 extends Node
         nodeX = coord.getX();
         nodeY = coord.getY();
         
-        if(selected)
+        if(selected)    //If this is the current node  
         {
             g.setColor(new Color(120, 255, 120)); // selected so set to light green
             g.fillRect(nodeX, nodeY, WIDTH, HEIGHT); // fill background green
+        }
+        else if(lastNode)    //If this is the last node in the stepping process
+        {
+        	g.setColor(new Color(255, 120, 120));  // failure in search so set to light red
+            g.fillRect(nodeX, nodeY, WIDTH, HEIGHT); // fill background light red
         }
         
         g.setColor(Color.BLACK);

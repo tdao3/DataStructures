@@ -8,7 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.*;
-import javax.swing.JApplet;
+
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color; 
@@ -22,25 +22,35 @@ public class StructureVisualization extends JApplet implements ActionListener
     private JButton finishButton;      // Button to finish the rest of the steps of the current operation.
     
     private JTextField inputValueField;  // Input field to gather a data value for the operation.
-    private JLabel inputLabel;           // Label for the inputValueField
+    private JLabel inputLabel;           // Label for the inputValueField.
     
     private JPanel buttonPanelSection;   // Panel to hold all button panels.
     private JPanel topButtonRow;         // Panel to hold operation buttons and input field.
-    private JPanel middleInputRow;       // Panel to hold input value field and label
+    private JPanel middleInputRow;       // Panel to hold input value field and label.
     private JPanel bottomButtonRow;      // Panel to hold stepping through operation buttons.
-    private JPanel drawingArea;          // Panel where the tree with be displayed 
+    private JPanel drawingArea;          // Panel where the tree will be displayed.
     
-    private int drawAreaHeight;          // Height of JPanel drawingArea used for drawing tree
-    private int drawAreaWidth;           // Width of JPanel drawingArea  used for drawing tree
+    private int drawAreaHeight;          // Height of JPanel drawingArea used for drawing tree.
+    private int drawAreaWidth;           // Width of JPanel drawingArea  used for drawing tree.
+    private int inputValue;              // Integer value entered by the user.
     
-    private Node[] nodes;
-    private Node current;
+    private boolean isSearch;            // True if user is searching through tree
+                                         // false otherwise.
+    
+    private Node[] nodes;                // Node array all nodes in the tree
+    private Node current;                // Current node accessed
+    private Node root;                   // Root node of the tree
+    private Node previous;               // Keeps track of previously accessed node
     
     public void init()
     {
         //Set the original GUI size.
         setSize(800,680);                                        
         setLayout(new BorderLayout());        
+        
+        //Initialize default values
+        isSearch = false;
+        inputValue = 0;
         
         //Initialize buttons.
         insertButton = new JButton("Insert");
@@ -53,7 +63,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         inputValueField = new JTextField(10);
         
         //Initialize label
-        inputLabel = new JLabel("Enter value:");
+        inputLabel = new JLabel("Enter integer:");
         
         //Initialize panels
         buttonPanelSection = new JPanel();
@@ -74,6 +84,10 @@ public class StructureVisualization extends JApplet implements ActionListener
         deleteButton.addActionListener(this);
         stepButton.addActionListener(this);
         finishButton.addActionListener(this);
+        
+        //Disable step and finish buttons
+        stepButton.setEnabled(false);
+        finishButton.setEnabled(false);
         
         //Add components to top row of buttons and text field.
         topButtonRow.add(insertButton);
@@ -128,13 +142,25 @@ public class StructureVisualization extends JApplet implements ActionListener
             }
         }
         
-        current = nodes[4];
+        //current = nodes[4];
+        root = nodes[4];
     }
     
     //Paint the GUI, and gets the graphics object.   
     public void paint(Graphics g)
     {
         super.paint(g);    
+        
+        if(isSearch)    //If user is searching through tree
+        { 
+            //Disable input text field.
+            inputValueField.setEnabled(false);
+        }
+        else  //otherwise
+        {
+        	//Enable input text field.
+            inputValueField.setEnabled(true);
+        }
         
         // change the size of the window in ScaledPoint to the current size
         ScaledPoint.setWindowSize(getWidth(), getHeight());
@@ -151,7 +177,161 @@ public class StructureVisualization extends JApplet implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) 
     {
-        // TODO Auto-generated method stub
+        //Iterate through the nodes of the tree
+        for(Node n : root.getChildren())
+        {
+            //Set the class member lastNode to false for 
+        	//every node in the tree 
+            n.setLastNode(false);
+            for(Node m : n.getChildren())
+            {
+                m.setLastNode(false);
+            }
+        }
+    	
+        if(e.getSource() == searchButton)    //If search button is pressed
+        {	
+            if(inputValueField.getText().equals(""))  //If no input entered
+            {
+            	JOptionPane.showMessageDialog(null, "You must enter in a value." );
+            }
+            else   //input was entered
+            {
+            	//Check if input is a valid integer 
+            	try{
+            		  inputValue = Integer.parseInt(inputValueField.getText());
+                    	
+            		  //Enable step and finish buttons
+                      stepButton.setEnabled(true);
+                	  finishButton.setEnabled(true);
+                	  
+                	  //Disable insert and delete buttons
+                	  insertButton.setEnabled(false);
+                	  deleteButton.setEnabled(false);
+                	  
+                	  //User is searching tree
+                	  isSearch = true;
+                	  
+            		  current = root;
+            		  
+            		  if(current == null)  //If tree is empty
+            		  {
+            			  JOptionPane.showMessageDialog(null, "The value " + inputValue + " is not found." );
+            			  current = root;
+            		  }
+            		  else if(current.hasKey(inputValue))  //If current node contains the key 
+            		  {
+            			  JOptionPane.showMessageDialog(null, "The value " + inputValue + " has been found." );
+            			  
+            			  //Reset other buttons
+            			  stepButton.setEnabled(false);
+                    	  finishButton.setEnabled(false);
+                    	  insertButton.setEnabled(true);
+                    	  deleteButton.setEnabled(true);
+                    	  
+                    	  //User done searching
+                    	  isSearch = false;
+            		  }
+            		  
+            		} catch (NumberFormatException d) {
+            			//Invalid input given
+            			JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
+            		}
+            }
+        }
+        
+        if(e.getSource() == stepButton)   //If step button is pressed
+        {
+            if(isSearch)  //If user is searching
+            {
+                stepSearch();
+            }
+           
+        }
+        
+        if(e.getSource() == finishButton)   //If finish button is pressed
+        {
+            if(isSearch)   //If user is searching
+            {
+                finishSearch();
+                
+                //User done searching
+                isSearch = false;
+                
+                //Reset other buttons
+                finishButton.setEnabled(false);
+                stepButton.setEnabled(false);
+                insertButton.setEnabled(true);
+          	    deleteButton.setEnabled(true);
+            }
+        }
+        
+        repaint();
+    }
+    
+    
+    public void stepSearch()
+    {
+        //Keep track of previous node
+        previous = current;
+    	
+        //Find the next node to traverse to
+        current = current.findPath(inputValue);
+        
+        if(current == null)  //If traversed through whole tree
+        {
+            //User is done searching
+            isSearch = false;
+            JOptionPane.showMessageDialog(null, "The value " + inputValue + " is not found." );
+            
+            //Set previous node as last accessed node
+            previous.setLastNode(true);
+            
+            //Reset other buttons
+            finishButton.setEnabled(false);
+            stepButton.setEnabled(false);
+            insertButton.setEnabled(true);
+      	    deleteButton.setEnabled(true);
+        }
+        else if(current.hasKey(inputValue))  //If key has been found
+        {
+            //User is done searching
+            isSearch = false;
+            JOptionPane.showMessageDialog(null, "The value " + inputValue + " has been found." );
+            
+            //Reset other buttons
+            finishButton.setEnabled(false);
+            stepButton.setEnabled(false);
+            insertButton.setEnabled(true);
+      	    deleteButton.setEnabled(true);
+        }
+        validate();
+    }
+    
+    public void finishSearch()
+    {
+    	//Traverse through the tree until no node left or until key is found
+        while(current != null && !current.hasKey(inputValue))
+        {
+        	//Keep track of previous node
+        	previous = current;
+        	
+        	//Find the next node to traverse to
+            current = current.findPath(inputValue);
+        }
+        
+        if(current == null)    //If traversed through whole tree
+        {
+            JOptionPane.showMessageDialog(null, "The value " + inputValue + " is not found." );
+            
+            //Set previous node as last accessed node
+            previous.setLastNode(true);
+        }
+        else if(current.hasKey(inputValue))  //If key has been found
+        {
+            JOptionPane.showMessageDialog(null, "The value " + inputValue + " has been found." );
+        }
+        validate();
     }
 
 }

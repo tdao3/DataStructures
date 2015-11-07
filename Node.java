@@ -17,7 +17,10 @@ public abstract class Node
 
     protected int subtreeWidth;   // used for spacing nodes in drawing
     
-    protected ScaledPoint coord;
+    protected boolean lastNode;   // true if node was the last node in the stepping process,
+                                  // false otherwise
+    
+    protected ScaledPoint coord;  // used to represent location of node based on varying applet size
 
     public abstract void drawNode(Graphics g, boolean selected);      // subclasses draws the corresponding node 
 
@@ -118,9 +121,15 @@ public abstract class Node
         return parent;
     }
     
+    public void setLastNode(boolean lastNode)
+    // POST: class member lastNode is set to parameter lastNode
+    {
+        this.lastNode = lastNode;
+    }
+    
     public int getSubtreeWidths()
     // POST: FCTVAL == the width of the subtree of the Node that this method
-    //       is invoked upon. Also, subtreeWidth is set to the sum of the childrens
+    //       is invoked upon. Also, subtreeWidth is set to the sum of the children's
     //       subtrees, or the width of the Node(if isLeaf)
     {
         if(isLeaf())
@@ -132,15 +141,16 @@ public abstract class Node
         {
             subtreeWidth = NODE_SPACING_X/2; // start as a buffer value for left spacing
             
-            // iterate through each child and find and add childs subtreeWidth
+            // iterate through each child and find and add child's subtreeWidth
             // plus a buffer value to space out the nodes
             for(Node n : children)
             {
-                subtreeWidth += n.getSubtreeWidths() + NODE_SPACING_X;
+               subtreeWidth += n.getSubtreeWidths() + NODE_SPACING_X;
             }
             
-            subtreeWidth -= NODE_SPACING_X/2;
             // subtract half of the buffer distance on right side
+            subtreeWidth -= NODE_SPACING_X/2;
+         
             return subtreeWidth;
         }
     }
@@ -179,10 +189,10 @@ public abstract class Node
             // plus half of the width of this node to center it again
             subtreeStartX = (coord.getX() + (getNodeWidth()/2)) - (subtreeWidth / 2);
             
-            currentX = subtreeStartX + NODE_SPACING_X/2; // given initial leftside buffer
+            currentX = subtreeStartX + NODE_SPACING_X/2; // given initial left side buffer
             for(Node n : children) // iterate through children and position them
             {
-                n.coord.setX(currentX + (n.subtreeWidth/2) - (n.getNodeWidth()/2));
+                n.coord.setX(currentX + (n.subtreeWidth/2)- (n.getNodeWidth()/2));
                 n.coord.setY(coord.getY() + HEIGHT + NODE_SPACING_Y);
                 
                 currentX += n.subtreeWidth + NODE_SPACING_X;

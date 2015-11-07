@@ -12,7 +12,7 @@ public class Node2 extends Node
     
 	public Node2()
     //POST: A default Node2 object is created with a key set to 1, child nodes and
-	//      parent node set to null, and coordinates of 0,0.
+	//      parent node set to null, coordinates of 0,0, and lastNode set to false.
     {
         this(1, null, null, new ScaledPoint(0, 0)); 
     }
@@ -22,7 +22,8 @@ public class Node2 extends Node
     //     pointers in the array, and coord is initialized.
     //POST: A Node2 object is created with a key set to key, child nodes set to 
     //      corresponding pointers in children, a parent node set to parent,
-    //      and coordinates set to coord, and subtreeWidth initialized to 0
+    //      and coordinates set to coord, subtreeWidth initialized to 0,
+    //      and lastNode set to false.
     {
     	int counter;           //counter for for loop
 
@@ -41,6 +42,8 @@ public class Node2 extends Node
         
 		this.coord = coord;
 		
+		lastNode = false;
+		
 		subtreeWidth = 0;
     }
 
@@ -49,7 +52,7 @@ public class Node2 extends Node
     //PRE: g and selected are initialized.
     //POST: a rectangle 2 node and connector lines to its children are drawn
     //      and its color is based on whether this node is the current node 
-    //      in the step process.
+    //      in the step process or the last node accessed in the stepping process.
     {
     	int nodeX;     // x coord of top left corner of node
     	int nodeY;     // y coord of top left corner of node
@@ -60,6 +63,11 @@ public class Node2 extends Node
         if(selected)    //If this is the current node  
         {
             g.setColor(new Color(120, 255, 120));
+            g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
+        }
+        else if(lastNode)   //If this is the last node in the stepping process
+        {
+        	g.setColor(new Color(255, 120, 120));
             g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
         }
 

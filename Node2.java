@@ -142,8 +142,11 @@ public class Node2 extends Node
         }
         
         updatedNode = new Node3(newKeys, updatedChildren, parent, coord);
-        parent.updateChildPtr(this, updatedNode);     //the new Node3 becomes the parent of 
+        if(!isRoot())
+        {
+            parent.updateChildPtr(this, updatedNode); //the new Node3 becomes the parent of 
                                                       //    all the previous children
+        }
         
         // set children of new updatedNode to point to updated
         // node as parent

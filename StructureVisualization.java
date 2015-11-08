@@ -222,7 +222,6 @@ public class StructureVisualization extends JApplet implements ActionListener
                         
                       //Enable step and finish buttons
                       stepButton.setEnabled(true);
-<<<<<<< Updated upstream
                       finishButton.setEnabled(true);
                       
                       //Disable insert and delete buttons
@@ -252,9 +251,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                           //User done searching
                           isSearch = false;
                       }
-                      
-                    } 
-=======
+                
                 	  finishButton.setEnabled(true);
                 	  
                 	  //Disable insert and delete buttons
@@ -295,8 +292,8 @@ public class StructureVisualization extends JApplet implements ActionListener
             		  }
             		  
             		} 
->>>>>>> Stashed changes
-                    catch (NumberFormatException d) {
+                    catch (NumberFormatException d) 
+                    {
                         //Invalid input given
                         JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
                     }

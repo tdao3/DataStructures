@@ -81,7 +81,7 @@ public class Node4 extends Node
         }
         else if(lastNode)    //If this is the last node in the stepping process
         {
-        	g.setColor(new Color(255, 120, 120));  // failure in search so set to light red
+            g.setColor(new Color(255, 120, 120));  // failure in search so set to light red
             g.fillRect(nodeX, nodeY, WIDTH, HEIGHT); // fill background light red
         }
         
@@ -166,6 +166,22 @@ public class Node4 extends Node
         
         lChild.setParent(newParent);
         rChild.setParent(newParent);
+        
+        if(!lChild.isLeaf())
+        {
+            for(Node n : lChild.getChildren())
+            {
+                n.setParent(lChild);
+            }
+        }
+        
+        if(!rChild.isLeaf())
+        {
+            for(Node n : rChild.getChildren())
+            {
+                n.setParent(rChild);
+            }
+        }
         
         if(parent != null) // this is not the root node
         {

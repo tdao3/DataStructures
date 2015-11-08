@@ -59,7 +59,7 @@ public class Node4 extends Node
         subtreeWidth = 0;
     }
     
-    public void drawNode(Graphics g, boolean selected)
+    public void drawNode(Graphics g, Node current)
     //PRE: g and selected are initialized.
     //POST: a rectangle 4 node and connector lines to its children are drawn
     //      and its color is based on whether this node is the current node 
@@ -74,7 +74,7 @@ public class Node4 extends Node
         nodeX = coord.getX();
         nodeY = coord.getY();
         
-        if(selected)    //If this is the current node  
+        if(this == current)    //If this is the current node  
         {
             g.setColor(new Color(120, 255, 120)); // selected so set to light green
             g.fillRect(nodeX, nodeY, WIDTH, HEIGHT); // fill background green
@@ -103,23 +103,28 @@ public class Node4 extends Node
         
         for(int i = 0; i < children.length; i++) // iterate through children
         {
-            if (children[i] instanceof Node2) // if the child is a Node2
+            if(children[i] != null) // if the child isn't null
             {
-                g.drawLine(nodeX + ((WIDTH/3)*i), nodeY + HEIGHT,
-                           children[i].coord.getX() + (Node2.WIDTH/2),
-                           children[i].coord.getY());
-            }
-            else if (children[i] instanceof Node3) // if the child is a Node3
-            {
-                g.drawLine(nodeX + ((WIDTH/3)*i), nodeY + HEIGHT,
-                           children[i].coord.getX() + (Node3.WIDTH/2),
-                           children[i].coord.getY());
-            }
-            else if (children[i] instanceof Node4) // if the child is a Node4
-            {
-                g.drawLine(nodeX + ((WIDTH/3)*i), nodeY + HEIGHT,
-                           children[i].coord.getX() + (Node4.WIDTH/2),
-                           children[i].coord.getY());
+                if (children[i] instanceof Node2) // if the child is a Node2
+                {
+                    g.drawLine(nodeX + ((WIDTH/3)*i), nodeY + HEIGHT,
+                               children[i].coord.getX()+ Node2.WIDTH/2,
+                               children[i].coord.getY());
+                }
+                else if (children[i] instanceof Node3) // if the child is a Node3
+                {
+                    g.drawLine(nodeX + ((WIDTH/3)*i), nodeY + HEIGHT,
+                               children[i].coord.getX() + Node3.WIDTH/2,
+                               children[i].coord.getY());
+                }
+                else if (children[i] instanceof Node4) // if the child is a Node4
+                {
+                    g.drawLine(nodeX + ((WIDTH/3)*i), nodeY + HEIGHT,
+                               children[i].coord.getX() + Node4.WIDTH/2,
+                               children[i].coord.getY());
+                }
+                
+                children[i].drawNode(g, current); // draw the child
             }
         }
     }
@@ -155,9 +160,9 @@ public class Node4 extends Node
     {
         // creating 3 new Node2 by splitting the Node4
         // scalepoint set to null for now 
-        Node2 lChild = new Node2(keys[0], new Node[]{children[0], children[1]}, null, null);
-        Node2 rChild = new Node2(keys[2], new Node[]{children[2], children[3]}, null, null);
-        Node2 newParent = new Node2(keys[1], new Node[]{lChild, rChild}, null, null);
+        Node2 lChild = new Node2(keys[0], new Node[]{children[0], children[1]}, null, new ScaledPoint());
+        Node2 rChild = new Node2(keys[2], new Node[]{children[2], children[3]}, null, new ScaledPoint());
+        Node2 newParent = new Node2(keys[1], new Node[]{lChild, rChild}, null, new ScaledPoint());
         
         lChild.setParent(newParent);
         rChild.setParent(newParent);
@@ -168,7 +173,7 @@ public class Node4 extends Node
             {
                 return ((Node2)(parent)).absorbNode(newParent);
             }
-            else   //If the parent is a Node3 object
+            else if(parent instanceof Node3)   //If the parent is a Node3 object
             {
                 return ((Node3)(parent)).absorbNode(newParent);
             }

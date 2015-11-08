@@ -50,7 +50,7 @@ public class Node3 extends Node
         subtreeWidth = 0;
     }
 
-    public void drawNode(Graphics g, boolean selected)
+    public void drawNode(Graphics g, Node current)
     //PRE: g and selected are initialized.
     //POST: a rectangle 3 node and connector lines to its children are drawn
     //      and its color is based on whether this node is the current node 
@@ -63,7 +63,7 @@ public class Node3 extends Node
         nodeX = coord.getX();
         nodeY = coord.getY();
 
-        if(selected)    //If this is the current node  
+        if(this == current)    //If this is the current node  
         {
             g.setColor(new Color(120,255,120)); //when node is selected border is green
             g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
@@ -88,25 +88,30 @@ public class Node3 extends Node
         g.drawString(Integer.toString(keys[1]), nodeX + (WIDTH/2) + 4, nodeY + (HEIGHT/2) + 4);
 
         // draw lines to children of this node
-                for(int i = 0; i < children.length; i++)            //go through children
+        for(int i = 0; i < children.length; i++)            //go through children
         {
-            if(children[i] instanceof Node2)                //if child is a 2 Node 
+            if(children[i] != null) // if the child isn't null
             {
-                g.drawLine(nodeX + ((WIDTH/2)*i), nodeY + HEIGHT, 
-                           children[i].coord.getX() + Node2.WIDTH/2,
-                           children[i].coord.getY());
-            }
-            else if (children[i] instanceof Node3) // if the child is a Node3
-            {
-                g.drawLine(nodeX + ((WIDTH/2)*i), nodeY + HEIGHT,
-                           children[i].coord.getX() + Node3.WIDTH/2,
-                           children[i].coord.getY());
-            }
-            else if (children[i] instanceof Node4) // if the child is a Node4
-            {
-                g.drawLine(nodeX + ((WIDTH/2)*i), nodeY + HEIGHT,
-                           children[i].coord.getX() + Node4.WIDTH/2,
-                           children[i].coord.getY());
+                if (children[i] instanceof Node2) // if the child is a Node2
+                {
+                    g.drawLine(nodeX + ((WIDTH/2)*i), nodeY + HEIGHT,
+                               children[i].coord.getX()+ Node2.WIDTH/2,
+                               children[i].coord.getY());
+                }
+                else if (children[i] instanceof Node3) // if the child is a Node3
+                {
+                    g.drawLine(nodeX + ((WIDTH/2)*i), nodeY + HEIGHT,
+                               children[i].coord.getX() + Node3.WIDTH/2,
+                               children[i].coord.getY());
+                }
+                else if (children[i] instanceof Node4) // if the child is a Node4
+                {
+                    g.drawLine(nodeX + ((WIDTH/2)*i), nodeY + HEIGHT,
+                               children[i].coord.getX() + Node4.WIDTH/2,
+                               children[i].coord.getY());
+                }
+                
+                children[i].drawNode(g, current); // draw the child
             }
         }
     }

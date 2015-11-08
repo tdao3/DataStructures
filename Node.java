@@ -22,13 +22,22 @@ public abstract class Node
     
     protected ScaledPoint coord;  // used to represent location of node based on varying applet size
 
-    public abstract void drawNode(Graphics g, boolean selected);      // subclasses draws the corresponding node 
+    public abstract void drawNode(Graphics g, Node current); // subclasses draws the corresponding node 
 
     public abstract Node findPath(int n);           // subclasses finds path taken to get 
                                                     // to node being searched
     
     public abstract int getNodeWidth();             // returns the width of the type of node                                           
-                                                    
+    
+    public void drawTree(Graphics g, Node root, Node current)
+    // PRE:  g is the Graphics context to be drawn in, root and current 
+    //       are both initialized.
+    // POST: all nodes in the tree have drawNode invoked upon them, recursively
+    //       from the root to the leaves
+    {
+        root.drawNode(g, current);
+    }
+    
     public void setParent(Node parent)
     // PRE:  parent is null if no parent or is initialized otherwise
     // POST: class member parent equals the parameter Node parent

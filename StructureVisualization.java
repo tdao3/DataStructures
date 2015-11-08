@@ -22,12 +22,15 @@ public class StructureVisualization extends JApplet implements ActionListener
     private JButton finishButton;      // Button to finish the rest of the steps of the current operation.
     
     private JTextField inputValueField;  // Input field to gather a data value for the operation.
+    private JTextField infoField;        // Text field to display description of current operation on tree.
     private JLabel inputLabel;           // Label for the inputValueField.
+    private JLabel infoLabel;            // Label for the infoField.
     
     private JPanel buttonPanelSection;   // Panel to hold all button panels.
     private JPanel topButtonRow;         // Panel to hold operation buttons and input field.
     private JPanel middleInputRow;       // Panel to hold input value field and label.
     private JPanel bottomButtonRow;      // Panel to hold stepping through operation buttons.
+    private JPanel infoPanel;            // Panel to hold text field.
     private JPanel drawingArea;          // Panel where the tree will be displayed.
     
     private int drawAreaHeight;          // Height of JPanel drawingArea used for drawing tree.
@@ -39,6 +42,9 @@ public class StructureVisualization extends JApplet implements ActionListener
     private boolean isInsert;            // Value true if user is inserting into the tree
                                          // false otherwise.
     
+    private String currentKeys;          // String representation of keys of current node.
+    private String infoString;           // String representation of the text inside infoField.
+
     private Node[] nodes;                // Node array all nodes in the tree
     private Node current;                // Current node accessed
     private Node root;                   // Root node of the tree
@@ -50,9 +56,11 @@ public class StructureVisualization extends JApplet implements ActionListener
         setSize(800,680);                                        
         setLayout(new BorderLayout());        
         
-        //Initialize default values
+        //Initialize default values.
         isSearch = false;
         inputValue = 0;
+        currentKeys = "";
+        infoString = "";
         
         //Initialize buttons.
         insertButton = new JButton("Insert");
@@ -61,22 +69,26 @@ public class StructureVisualization extends JApplet implements ActionListener
         stepButton = new JButton("Step");
         finishButton = new JButton("Finish");
         
-        //Initialize text field.
+        //Initialize text fields.
         inputValueField = new JTextField(10);
+        infoField = new JTextField(50);
+        infoField.setEditable(false);
         
-        //Initialize label
+        //Initialize labels.
         inputLabel = new JLabel("Enter integer:");
+        infoLabel = new JLabel("Current Step:");
         
-        //Initialize panels
+        //Initialize panels.
         buttonPanelSection = new JPanel();
         buttonPanelSection.setLayout(new BorderLayout());
         
+        infoPanel = new JPanel();
         topButtonRow = new JPanel();
         middleInputRow = new JPanel();
         bottomButtonRow = new JPanel();
 
-        //Initialize drawing area
-        drawingArea = new JPanel();
+        //Initialize drawing area.
+        drawingArea = new JPanel(new BorderLayout());
         drawAreaHeight = drawingArea.getHeight();       //getting height and width of drawing area
         drawAreaWidth = drawingArea.getWidth();    
         
@@ -104,14 +116,18 @@ public class StructureVisualization extends JApplet implements ActionListener
         bottomButtonRow.add(stepButton);
         bottomButtonRow.add(finishButton);
         
+        //Add components to information panel.
+        infoPanel.add(infoLabel);
+        infoPanel.add(infoField);
+        
         //Add panels to border layout.
         buttonPanelSection.add(topButtonRow, BorderLayout.NORTH);
         buttonPanelSection.add(middleInputRow, BorderLayout.CENTER);
         buttonPanelSection.add(bottomButtonRow, BorderLayout.SOUTH);
+        drawingArea.add(infoPanel);
         add(buttonPanelSection, BorderLayout.NORTH);
         add(drawingArea, BorderLayout.CENTER);
        
-        
         
         // testing drawing nodes
         nodes = new Node[13];
@@ -206,6 +222,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                         
                       //Enable step and finish buttons
                       stepButton.setEnabled(true);
+<<<<<<< Updated upstream
                       finishButton.setEnabled(true);
                       
                       //Disable insert and delete buttons
@@ -237,6 +254,48 @@ public class StructureVisualization extends JApplet implements ActionListener
                       }
                       
                     } 
+=======
+                	  finishButton.setEnabled(true);
+                	  
+                	  //Disable insert and delete buttons
+                	  insertButton.setEnabled(false);
+                	  deleteButton.setEnabled(false);
+                	  
+                	  //User is searching tree
+                	  isSearch = true;
+                	  
+                	  //Update current node.
+            		  current = root;
+            		  
+            		  if(current != null)  //If tree is not empty
+            	      {
+            		      //Update current step info.
+            	          displayComparison();
+            	      }
+            		  
+            		  if(current == null)  //If tree is empty
+            		  {
+            			  //Update current step info.
+            			  infoField.setText("The value " + inputValue + " is not found.");
+            			  current = root;
+            		  }
+            		  else if(current.hasKey(inputValue))  //If current node contains the key 
+            		  {
+            		      //Update current step info.
+            			  infoField.setText(infoString + " The value " + inputValue + " has been found.");
+            			  
+            			  //Reset other buttons
+            			  stepButton.setEnabled(false);
+                    	  finishButton.setEnabled(false);
+                    	  insertButton.setEnabled(true);
+                    	  deleteButton.setEnabled(true);
+                    	  
+                    	  //User done searching
+                    	  isSearch = false;
+            		  }
+            		  
+            		} 
+>>>>>>> Stashed changes
                     catch (NumberFormatException d) {
                         //Invalid input given
                         JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
@@ -310,11 +369,17 @@ public class StructureVisualization extends JApplet implements ActionListener
         //Find the next node to traverse to
         current = current.findPath(inputValue);
         
+        if(current != null)   //If current node is not null
+        {
+            //Update current step info.
+            displayComparison();
+        }
+        
         if(current == null)  //If traversed through whole tree
         {
             //User is done searching
             isSearch = false;
-            JOptionPane.showMessageDialog(null, "The value " + inputValue + " is not found." );
+            infoField.setText("The value " + inputValue + " has not been found.");
             
             //Set previous node as last accessed node
             previous.setLastNode(true);
@@ -329,7 +394,9 @@ public class StructureVisualization extends JApplet implements ActionListener
         {
             //User is done searching
             isSearch = false;
-            JOptionPane.showMessageDialog(null, "The value " + inputValue + " has been found." );
+            
+            //Update current step info.
+            infoField.setText(infoString + " The value " + inputValue + " has been found.");
             
             //Reset other buttons
             finishButton.setEnabled(false);
@@ -354,16 +421,37 @@ public class StructureVisualization extends JApplet implements ActionListener
         
         if(current == null)    //If traversed through whole tree
         {
-            JOptionPane.showMessageDialog(null, "The value " + inputValue + " is not found." );
+        	//Update current step info.
+            infoField.setText("The value " + inputValue + " is not found.");
             
             //Set previous node as last accessed node
             previous.setLastNode(true);
         }
         else if(current.hasKey(inputValue))  //If key has been found
         {
-            JOptionPane.showMessageDialog(null, "The value " + inputValue + " has been found." );
+        	//Update current step info.
+            displayComparison();
+            infoField.setText(infoString + " The value " + inputValue + " has been found.");
         }
         validate();
+    }
+    
+    public void displayComparison()
+    {
+        //Reset info strings.
+    	currentKeys = "";
+    	infoString = "";
+    	
+    	//Populate the currentKeys with the keys of the current node.
+    	for(int k : current.getKeys())
+        {
+            currentKeys += Integer.toString(k) + ", ";   
+        }
+    	
+    	//Set the text of the infoField to represent the current comparison.
+    	currentKeys = currentKeys.substring(0, currentKeys.length() - 2);
+    	infoString = "Now comparing input value " + inputValue + " with node key(s) " + currentKeys + ".";
+    	infoField.setText(infoString);
     }
 
      public void insert() 

@@ -41,6 +41,8 @@ public class StructureVisualization extends JApplet implements ActionListener
                                          // false otherwise.
     private boolean isInsert;            // Value true if user is inserting into the tree
                                          // false otherwise.
+    private boolean isDelete;            // Value true if user is deleting a value in the tree
+                                         // false otherwise.
     
     private String currentKeys;          // String representation of keys of current node.
     private String infoString;           // String representation of the text inside infoField.
@@ -58,6 +60,8 @@ public class StructureVisualization extends JApplet implements ActionListener
         
         //Initialize default values.
         isSearch = false;
+        isInsert = false;
+        isDelete = false;
         inputValue = 0;
         currentKeys = "";
         infoString = "";
@@ -334,6 +338,48 @@ public class StructureVisualization extends JApplet implements ActionListener
                     //Update current step info.
                 	displayComparison();
                     infoField.setText(infoString);
+                }
+                catch (NumberFormatException d)
+                {
+                    //Invalid input given
+                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
+                }
+                 
+            }
+        }
+        
+        
+        /**************************DELETE****************************/
+
+        if(e.getSource() == deleteButton)             //User clicked delete button 
+        {
+            if(inputValueField.getText().equals(""))  //If no input entered
+            {
+                JOptionPane.showMessageDialog(null, "You must enter in a value." );
+            }
+            else
+            {
+                // error checking for user input 
+                try
+                {
+                    inputValue = Integer.parseInt(inputValueField.getText());
+                    
+                    //Enable step and finish buttons
+                    //stepButton.setEnabled(true);
+                    //finishButton.setEnabled(true);
+                    
+                    //Disable search, delete, and insert buttons
+                    searchButton.setEnabled(false);
+                    insertButton.setEnabled(false);
+                    //deleteButton.setEnabled(false);
+                    
+                    //Assign current node to begin at root
+                    current = root;
+                    
+                    //User is inserting in tree
+                    isDelete = true;
+                    
+                    finishDelete();
                 }
                 catch (NumberFormatException d)
                 {
@@ -666,6 +712,33 @@ public class StructureVisualization extends JApplet implements ActionListener
         finishButton.setEnabled(false);
         searchButton.setEnabled(true);
         deleteButton.setEnabled(true);  
+    }
+    
+    
+    public void finishDelete()
+    {
+    	//Traverse through the tree until no node left or until key is found
+        while(current != null && !current.hasKey(inputValue))
+        {
+            //Keep track of previous node
+            previous = current;
+            
+            //Find the next node to traverse to
+            current = current.findPath(inputValue);
+        }
+        
+        if(current == null)    //If traversed through whole tree
+        {
+            //Update current step info.
+            infoField.setText("The value " + inputValue + " does not exist.");
+        }
+        else if(current.hasKey(inputValue))  //If key has been found
+        {
+            if(current.isLeaf())  // if current node is a leaf
+            {
+                current.deleteLeafKey(inputValue);
+            }
+        }
     }
     
     public void displayComparison()

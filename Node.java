@@ -27,7 +27,9 @@ public abstract class Node
     public abstract Node findPath(int n);           // subclasses finds path taken to get 
                                                     // to node being searched
     
-    public abstract int getNodeWidth();             // returns the width of the type of node                                           
+    public abstract int getNodeWidth();             // returns the width of the type of node    
+    
+    public abstract void deleteLeafKey(int key);    // deletes the key from the leaf node
     
     public void drawTree(Graphics g, Node root, Node current)
     // PRE:  g is the Graphics context to be drawn in, root and current 
@@ -62,6 +64,7 @@ public abstract class Node
         {
             if(children[i] == oldChild) // if oldChild is found
             {
+            	
                 children[i] = newChild; // set it to newChild
             }
         }

@@ -245,4 +245,23 @@ public class Node3 extends Node
 
         return newNode;
     }
+
+	@Override
+	public void deleteLeafKey(int key) 
+	{  
+	    Node2 newLeaf;    //new leaf node after deletion
+	    
+	    if(key == this.keys[0])  // if value to delete is the first key
+	    {
+	        newLeaf = new Node2(this.keys[1], new Node[]{null, null}, parent, coord);
+	    }
+	    else   // if value to delete is the second key
+	    {
+	    	newLeaf = new Node2(this.keys[0], new Node[]{null, null}, parent, coord);
+	    }
+	    
+	    //Have parent point to the new leaf node
+	    parent.updateChildPtr(this, newLeaf);
+	    
+	}
 }

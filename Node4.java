@@ -204,4 +204,39 @@ public class Node4 extends Node
     {
         return WIDTH;
     }
+
+	@Override
+	public void deleteLeafKey(int key) 
+	{
+        Node3 newLeaf;   //new leaf node after deletion
+        int[] newKeys;   //new array of keys for the new leaf node
+        
+        newKeys = new int[2];
+	    
+	    if(key == this.keys[0])  // if value to delete is the first key
+	    {
+	    	//Keep the second and third key
+	        newKeys[0] = this.keys[1];
+	        newKeys[1] = this.keys[2];
+	        newLeaf = new Node3(newKeys, new Node[]{null, null, null}, parent, coord);
+	    }
+	    else if(key == this.keys[1])  // if value to delete is the second key
+	    {
+	    	//Keep the first and third key
+	    	newKeys[0] = this.keys[0];
+	        newKeys[1] = this.keys[2];
+	    	newLeaf = new Node3(newKeys, new Node[]{null, null, null}, parent, coord);
+	    }
+	    else   // if value to delete is the third key
+	    {
+	        //Keep the first and second key
+	    	newKeys[0] = this.keys[0];
+	        newKeys[1] = this.keys[1];
+	    	newLeaf = new Node3(newKeys, new Node[]{null, null, null}, parent, coord);
+	    }
+	    
+	    //Have parent point to the new leaf node
+	    parent.updateChildPtr(this, newLeaf);
+		
+	}
 }

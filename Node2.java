@@ -208,4 +208,10 @@ public class Node2 extends Node
 
         return newNode;
     }
+
+	@Override
+	public void deleteLeafKey(int key) {
+		// TODO Auto-generated method stub
+		
+	}
 }

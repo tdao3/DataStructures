@@ -206,7 +206,7 @@ public class Node4 extends Node
     }
 
 	@Override
-	public void deleteLeafKey(int key) 
+	public Node deleteLeafKey(int key) 
 	{
         Node3 newLeaf;   //new leaf node after deletion
         int[] newKeys;   //new array of keys for the new leaf node
@@ -237,6 +237,7 @@ public class Node4 extends Node
 	    
 	    //Have parent point to the new leaf node
 	    parent.updateChildPtr(this, newLeaf);
+	    return newLeaf;
 		
 	}
 }

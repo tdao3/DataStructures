@@ -29,7 +29,7 @@ public abstract class Node
     
     public abstract int getNodeWidth();             // returns the width of the type of node    
     
-    public abstract void deleteLeafKey(int key);    // deletes the key from the leaf node
+    public abstract Node deleteLeafKey(int key);    // deletes the key from the leaf node
     
     public void drawTree(Graphics g, Node root, Node current)
     // PRE:  g is the Graphics context to be drawn in, root and current 
@@ -131,6 +131,12 @@ public abstract class Node
     // POST: FCTVAL == the parent of this Node
     {
         return parent;
+    }
+    
+    public ScaledPoint getCoord()
+    // POST: FCTVAL == the ScaledPoint coord of this Node
+    {
+        return coord;
     }
     
     public void setLastNode(boolean lastNode)

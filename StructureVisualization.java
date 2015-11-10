@@ -380,6 +380,13 @@ public class StructureVisualization extends JApplet implements ActionListener
                     isDelete = true;
                     
                     finishDelete();
+                    
+                    //Reset other buttons
+                    stepButton.setEnabled(false);
+                    finishButton.setEnabled(false);
+                    insertButton.setEnabled(true);
+                    searchButton.setEnabled(true);
+                    deleteButton.setEnabled(true);  
                 }
                 catch (NumberFormatException d)
                 {
@@ -736,9 +743,10 @@ public class StructureVisualization extends JApplet implements ActionListener
         {
             if(current.isLeaf())  // if current node is a leaf
             {
-                current.deleteLeafKey(inputValue);
+                current = current.deleteLeafKey(inputValue);
             }
         }
+        
     }
     
     public void displayComparison()

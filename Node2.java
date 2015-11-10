@@ -210,8 +210,226 @@ public class Node2 extends Node
     }
 
 	@Override
-	public void deleteLeafKey(int key) {
-		// TODO Auto-generated method stub
+	public Node deleteLeafKey(int key) 
+	{
+		Node sibling;     //Sibling of this node
+		Node newSibling;  //New sibling node if rotation occurs
+		int[] newKeys;    //New key values for the new sibling node
 		
+		//Initialize to default values
+		sibling = null;
+		newSibling = null;
+		newKeys = null;
+		
+        //Case 1: check if we can steal a key from a sibling Node3 or Node4
+		//        or if fusion must take place
+		
+		if(parent instanceof Node2)  // if parent is a Node2
+		{
+		    if(key < parent.getKeys()[0])  // if this node is the left child of the parent
+		    {
+		        //Set sibling to right child
+		        sibling = parent.getChildren()[1];
+		        
+		        if(sibling instanceof Node4)  // if sibling is a Node4
+		        {
+		            //Rotate with the Node4 sibling
+		            siblingNode4Rotation(sibling, newSibling, newKeys, false, false, false);
+		        }
+		        else if(sibling instanceof Node3)  // if sibling is a Node3
+		        {
+		            //Rotate with the Node3 sibling
+		            siblingNode3Rotation(sibling, newSibling, newKeys, false, false, false);
+		        }
+		    }
+		    else if(key > parent.getKeys()[0])  // if this node is the right child of the parent
+		    {
+		        //Set sibling to left child
+		    	sibling = parent.getChildren()[0];
+		    	
+		    	if(sibling instanceof Node4)   // if sibling is a Node4
+		        {
+		    		//Rotate with the Node4 sibling
+		    		siblingNode4Rotation(sibling, newSibling, newKeys, true, false, false);
+		        }
+		    	else if(sibling instanceof Node3)   // if sibling is a Node3
+		        {
+		    		//Rotate with the Node3 sibling
+		        	siblingNode3Rotation(sibling, newSibling, newKeys, true, false, false);
+		        }
+		    }
+		}
+		else if(parent instanceof Node3)   // if the parent is a Node3
+		{
+			if(key < parent.getKeys()[0])   // if this node is the leftmost child
+		    {
+			    //Set the sibling to the middle child
+		        sibling = parent.getChildren()[1];
+		        
+		        if(sibling instanceof Node4)   // if sibling is a Node4
+		        {
+		        	//Rotate with the Node4 sibling
+		        	siblingNode4Rotation(sibling, newSibling, newKeys, false, false, false);
+		        }
+		        else if(sibling instanceof Node3)   // if sibling is a Node3
+		        {
+		        	//Rotate with the Node3 sibling
+		        	siblingNode3Rotation(sibling, newSibling, newKeys, false, false, false);
+		        }
+		    }
+			else if(key < parent.getKeys()[1])   // if this node is the middle child
+			{
+			    //Check to steal from left sibling first
+			    if(parent.getChildren()[0] instanceof Node3 || parent.getChildren()[0] instanceof Node4) // if left sibling can be stolen from
+			    {
+			        //Set sibling to left child
+			        sibling = parent.getChildren()[0];
+			        
+			        if(sibling instanceof Node4)   // if sibling is a Node4
+			        {
+			        	//Rotate with the Node4 sibling
+			            siblingNode4Rotation(sibling, newSibling, newKeys, true, false, false);
+			        }
+			    	else if(sibling instanceof Node3)   // if sibling is a Node3
+			        {
+			    		//Rotate with the Node3 sibling
+			        	siblingNode3Rotation(sibling, newSibling, newKeys, true, false, false);
+			        }
+			        
+			        
+			    }
+			    else if(parent.getChildren()[2] instanceof Node3 || parent.getChildren()[2] instanceof Node4)  // if right sibling can be stolen from
+			    {
+			        //Set sibling to right child
+			        sibling = parent.getChildren()[2];
+			        
+			        if(sibling instanceof Node4)   // if sibling is a Node4
+			        {
+			        	//Rotate with the Node4 sibling
+			        	siblingNode4Rotation(sibling, newSibling, newKeys, false, true, false);
+			        }
+			    	else if(sibling instanceof Node3)   // if sibling is a Node3
+			        {
+			    		//Rotate with the Node3 sibling
+			        	siblingNode3Rotation(sibling, newSibling, newKeys, false, true, false);
+			        }
+			    }
+			}
+			else if(key > parent.getKeys()[1])   // if this node is the rightmost child
+		    {
+			    //Set sibling to middle child
+		        sibling = parent.getChildren()[1];
+		        
+		        if(sibling instanceof Node4)   // if sibling is a Node4
+		        {
+		        	//Rotate with the Node4 sibling
+		            siblingNode4Rotation(sibling, newSibling, newKeys, true, false, true);
+		        }
+		    	else if(sibling instanceof Node3)   // if sibling is a Node3
+		        {
+		    		//Rotate with the Node3 sibling
+		            siblingNode3Rotation(sibling, newSibling, newKeys, true, false, true);
+		        }
+		    }
+		}
+		return this;
+        
+	}
+	
+	private void siblingNode3Rotation(Node sibling, Node newSibling, int[] newKeys, boolean leftSibling, boolean middleChild, boolean rightChild)
+	{
+	    //Allocate key for a Node2 object
+        newKeys = new int[1];
+        
+	    if(leftSibling)   // if this sibling is a left sibling
+	    {
+	        if(rightChild) // if this node is the rightmost child of a Node3 parent
+	        {
+	            //Rotate values accordingly
+	        	keys[0] = parent.getKeys()[1];
+	            parent.getKeys()[1] = sibling.getKeys()[1];
+	            newKeys[0] = sibling.getKeys()[0];
+	        }
+	        else  // this node is a right child of a Node2 parent
+	        {
+	        	//Rotate values accordingly
+	            keys[0] = parent.getKeys()[0];
+	            parent.getKeys()[0] = sibling.getKeys()[1];
+	            newKeys[0] = sibling.getKeys()[0];
+	        }
+         
+	    }
+	    else   // this sibling is a right sibling
+	    {
+	        if(middleChild) // if this node is the middle child of a Node3 parent
+	        {
+	        	//Rotate values accordingly
+	            keys[0] = parent.getKeys()[1];
+	            parent.getKeys()[1] = sibling.getKeys()[0];
+	            newKeys[0] = sibling.getKeys()[1];
+	        }
+	        else  // this node is a left child of a Node2 parent
+	        {
+	        	//Rotate values accordingly
+	        	keys[0] = parent.getKeys()[0];
+	            parent.getKeys()[0] = sibling.getKeys()[0];
+	            newKeys[0] = sibling.getKeys()[1];
+	        } 
+	    }
+	    
+	    //Create the updated sibling and have the old sibling parent point to the new one
+	    newSibling = new Node2(newKeys[0], new Node[]{null, null}, parent, sibling.getCoord());
+        parent.updateChildPtr(sibling, newSibling);
+	}
+	
+	
+	private void siblingNode4Rotation(Node sibling, Node newSibling, int[] newKeys, boolean leftSibling, boolean middleChild, boolean rightChild)
+	{
+	    //Allocate new keys for a Node3 object
+        newKeys = new int[2];
+        
+	    if(leftSibling)   // if this sibling is a left sibling
+	    {
+	        if(rightChild) // if this node is the rightmost child of a Node3 parent
+	        {
+	        	//Rotate values accordingly
+	        	keys[0] = parent.getKeys()[1];
+	            parent.getKeys()[1] = sibling.getKeys()[2];
+	            newKeys[0] = sibling.getKeys()[0];
+	            newKeys[1] = sibling.getKeys()[1];
+	        }
+	        else  // this node is a right child of a Node2 parent
+	        {
+	        	//Rotate values accordingly
+	        	keys[0] = parent.getKeys()[0];
+	            parent.getKeys()[0] = sibling.getKeys()[2];
+	            newKeys[0] = sibling.getKeys()[0];
+	            newKeys[1] = sibling.getKeys()[1];
+	        }
+         
+	    }
+	    else   // this sibling is a right sibling
+	    {
+	        if(middleChild) // if this node is the middle child of a Node3 parent
+	        {
+	        	//Rotate values accordingly
+	        	keys[0] = parent.getKeys()[1];
+	            parent.getKeys()[1] = sibling.getKeys()[0];
+	            newKeys[0] = sibling.getKeys()[1];
+	            newKeys[1] = sibling.getKeys()[2];
+	        }
+	        else  // this node is a left child of a Node2 parent
+	        {
+	        	//Rotate values accordingly
+	        	keys[0] = parent.getKeys()[0];
+	            parent.getKeys()[0] = sibling.getKeys()[0];
+	            newKeys[0] = sibling.getKeys()[1];
+	            newKeys[1] = sibling.getKeys()[2];
+	        } 
+	    }
+	    
+	    //Create the updated sibling and have the old sibling parent point to the new one
+	    newSibling = new Node3(newKeys, new Node[]{null, null, null}, parent, sibling.getCoord());
+        parent.updateChildPtr(sibling, newSibling);
 	}
 }

@@ -1,7 +1,8 @@
-/*
-Team: 2-3-4 Trio
-Members: TO, TD, AB
-*/
+// Programmer:  TO, AB, TD
+// Assignment:  Group Project 2
+// Date:        November 8th, 2015
+// Description: The class models one type of node that will be placed into the tree. Node2
+//				has exactly two children and one key value.
 
 import java.awt.Graphics;
 import java.awt.Color;

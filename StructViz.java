@@ -1,7 +1,9 @@
-/*
-Team: 2-3-4 Trio
-Members: TO, TD, AB
-*/
+// Programmer:  TO, AB, TD
+// Assignment:  Group Project 2
+// Date:        November 8th, 2015
+// Description: The class is the interface for the tree. IT will show the insertion, search, and
+//              deletion of the nodes within the tree.
+//
 
 
 import java.awt.FlowLayout;
@@ -13,7 +15,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color; 
 
-public class StructureVisualization extends JApplet implements ActionListener
+public class StructViz extends JApplet implements ActionListener
 {
     private JButton insertButton;      // Button to insert a value into the tree.
     private JButton searchButton;      // Button to search for a value in the tree.

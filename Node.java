@@ -1,7 +1,8 @@
-/*
-Team: 2-3-4 Trio
-Members: TO, TD, AB
-*/
+// Programmer:  TO, AB, TD
+// Assignment:  Group Project 2
+// Date:        November 8th, 2015
+// Description: The class models the general functions of the nodes that will be
+//              placed and used in the 2-3-4 tree.
 
 import java.awt.Graphics;
 

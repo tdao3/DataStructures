@@ -175,7 +175,7 @@ public class StructViz extends JApplet implements ActionListener
     public void paint(Graphics g)
     {
         super.paint(g);    
-        
+
         if(isSearch || isInsert)    //If user is searching or inserting in tree
         { 
             //Disable input text field.
@@ -197,6 +197,13 @@ public class StructViz extends JApplet implements ActionListener
             root.getSubtreeWidths();
             root.repositionNodes();
             root.drawTree(g, root, current);
+        }
+
+        deleteButton.setEnabled(false);
+
+        if(root == null)
+        {
+            searchButton.setEnabled(false);
         }
     }
     
@@ -239,6 +246,8 @@ public class StructViz extends JApplet implements ActionListener
                       //Disable insert and delete buttons
                       insertButton.setEnabled(false);
                       deleteButton.setEnabled(false);
+                      searchButton.setEnabled(false);
+                      
                       
                       //User is searching tree
                       isSearch = true;
@@ -247,6 +256,7 @@ public class StructViz extends JApplet implements ActionListener
                       
                       if(current == null)  //If tree is empty
                       {
+                          infoField.setText("The tree is empty.\n");
                           current = root;
                       }
                       else if(current.hasKey(inputValue))  //If current node contains the key 
@@ -256,15 +266,19 @@ public class StructViz extends JApplet implements ActionListener
                           finishButton.setEnabled(false);
                           insertButton.setEnabled(true);
                           deleteButton.setEnabled(true);
+                          searchButton.setEnabled(true);
                           
                           //User done searching
                           isSearch = false;
                       }
                       
+                      
                       //Disable insert and delete buttons
                       insertButton.setEnabled(false);
                       deleteButton.setEnabled(false);
+                      searchButton.setEnabled(false);
                       
+
                       //User is searching tree
                       isSearch = true;
                       
@@ -293,6 +307,8 @@ public class StructViz extends JApplet implements ActionListener
                           finishButton.setEnabled(false);
                           insertButton.setEnabled(true);
                           deleteButton.setEnabled(true);
+                          searchButton.setEnabled(true);
+
                           
                           //User done searching
                           isSearch = false;
@@ -330,6 +346,7 @@ public class StructViz extends JApplet implements ActionListener
                     //Disable search and delete buttons
                     searchButton.setEnabled(false);
                     deleteButton.setEnabled(false);
+                    insertButton.setEnabled(false);
                     
                     //Assign current node to begin at root
                     current = root;
@@ -487,6 +504,7 @@ public class StructViz extends JApplet implements ActionListener
             stepButton.setEnabled(false);
             insertButton.setEnabled(true);
             deleteButton.setEnabled(true);
+            searchButton.setEnabled(true);
         }
         else if(current.hasKey(inputValue))  //If key has been found
         {
@@ -501,6 +519,7 @@ public class StructViz extends JApplet implements ActionListener
             stepButton.setEnabled(false);
             insertButton.setEnabled(true);
             deleteButton.setEnabled(true);
+            searchButton.setEnabled(true);
         }
     }
     
@@ -623,6 +642,7 @@ public class StructViz extends JApplet implements ActionListener
             finishButton.setEnabled(false);
             searchButton.setEnabled(true);
             deleteButton.setEnabled(true);  
+            insertButton.setEnabled(true);
             
         }
         
@@ -759,6 +779,7 @@ public class StructViz extends JApplet implements ActionListener
         finishButton.setEnabled(false);
         searchButton.setEnabled(true);
         deleteButton.setEnabled(true);  
+        insertButton.setEnabled(true);
     }
     
     

@@ -173,6 +173,25 @@ public abstract class Node
         }
     }
     
+    
+    public void setLastNodeAll()
+    //PRE: Must be called by a root node object.
+    //POST: Recursively traverse through every node in the tree and set class
+    //      member lastNode to false.
+    {
+    	lastNode = false;
+    	
+    	if(!isLeaf())  // if this node has children
+    	{
+    		// iterate through each child and set lastNode to false
+            for(Node n : children)
+            {
+               n.setLastNodeAll();
+            }     
+    	}
+  
+    }
+    
     public void repositionNodes()
     // PRE:  to be used after getSubtreeWidths() has updated the subtreeWidth 
     //       of each Node

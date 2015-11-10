@@ -205,7 +205,7 @@ public class Node2 extends Node
 
         // new now has 2 values, the same children, parent , and coord 
         Node3 newNode = new Node3(newKeys, null, this.parent, this.coord);
-
+        
         return newNode;
     }
 

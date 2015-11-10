@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color; 
 
-public class StructViz extends JApplet implements ActionListener
+public class StructureVisualization extends JApplet implements ActionListener
 {
     private JButton insertButton;      // Button to insert a value into the tree.
     private JButton searchButton;      // Button to search for a value in the tree.
@@ -41,6 +41,8 @@ public class StructViz extends JApplet implements ActionListener
                                          // false otherwise.
     private boolean isInsert;            // Value true if user is inserting into the tree
                                          // false otherwise.
+    private boolean isDelete;            // Value true if user is deleting a value in the tree
+                                         // false otherwise.
     
     private String currentKeys;          // String representation of keys of current node.
     private String infoString;           // String representation of the text inside infoField.
@@ -58,6 +60,8 @@ public class StructViz extends JApplet implements ActionListener
         
         //Initialize default values.
         isSearch = false;
+        isInsert = false;
+        isDelete = false;
         inputValue = 0;
         currentKeys = "";
         infoString = "";
@@ -162,6 +166,7 @@ public class StructViz extends JApplet implements ActionListener
         
         //current = nodes[4];
         root = nodes[4];
+        root = null;
     }
     
     //Paint the GUI, and gets the graphics object.   
@@ -169,25 +174,26 @@ public class StructViz extends JApplet implements ActionListener
     {
         super.paint(g);    
         
-        if(isSearch)    //If user is searching through tree
+        if(isSearch || isInsert)    //If user is searching or inserting in tree
         { 
             //Disable input text field.
             inputValueField.setEnabled(false);
         }
-        else  //otherwise
+        else //otherwise
         {
             //Enable input text field.
             inputValueField.setEnabled(true);
         }
         
+
         // change the size of the window in ScaledPoint to the current size
-        ScaledPoint.setWindowSize(getWidth(), getHeight());
-        
-        root.getSubtreeWidths();
-        root.repositionNodes();
+        ScaledPoint.setWindowSize(getWidth(), getHeight());        
 
         // draw the tree as long as the root isn't null
-        if(root != null){
+        if(root != null)
+        {
+            root.getSubtreeWidths();
+            root.repositionNodes();
             root.drawTree(g, root, current);
         }
     }
@@ -195,18 +201,20 @@ public class StructViz extends JApplet implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) 
     {
-        //Iterate through the nodes of the tree
-        for(Node n : root.getChildren())
-        {
-            //Set the class member lastNode to false for 
-            //every node in the tree 
-            n.setLastNode(false);
-            for(Node m : n.getChildren())
+    	//Set the class member lastNode to false for 
+        //every node in the tree 
+    	if(root != null)   //if tree is not empty
+    	{
+    	    if(!root.isLeaf())    //if root has children
             {
-                m.setLastNode(false);
+                root.setLastNodeAll();
             }
-        }
-        
+    	    else  // if root is the only node
+    	    {
+    	        root.setLastNode(false);
+    	    }
+    	}
+                
 
         /**************************SEARCH****************************/
 
@@ -237,13 +245,10 @@ public class StructViz extends JApplet implements ActionListener
                       
                       if(current == null)  //If tree is empty
                       {
-                          JOptionPane.showMessageDialog(null, "The value " + inputValue + " is not found." );
                           current = root;
                       }
                       else if(current.hasKey(inputValue))  //If current node contains the key 
                       {
-                          JOptionPane.showMessageDialog(null, "The value " + inputValue + " has been found." );
-                          
                           //Reset other buttons
                           stepButton.setEnabled(false);
                           finishButton.setEnabled(false);
@@ -253,8 +258,6 @@ public class StructViz extends JApplet implements ActionListener
                           //User done searching
                           isSearch = false;
                       }
-                
-                      finishButton.setEnabled(true);
                       
                       //Disable insert and delete buttons
                       insertButton.setEnabled(false);
@@ -317,14 +320,89 @@ public class StructViz extends JApplet implements ActionListener
                 try
                 {
                     inputValue = Integer.parseInt(inputValueField.getText());
+                    
+                    //Enable step and finish buttons
+                    stepButton.setEnabled(true);
+                    finishButton.setEnabled(true);
+                    
+                    //Disable search and delete buttons
+                    searchButton.setEnabled(false);
+                    deleteButton.setEnabled(false);
+                    
+                    //Assign current node to begin at root
+                    current = root;
+                    
+                    //User is inserting in tree
+                    isInsert = true;
+                    
+                    //Update current step info.
+                    if(current == null)  //if tree is empty
+                    {
+                        stepInsert();
+                        current = root;
+                    }
+                    else   //tree is not empty
+                    {
+                    	displayComparison();
+                        infoField.setText(infoString);
+                    }
+
                 }
                 catch (NumberFormatException d)
                 {
                     //Invalid input given
                     JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
                 }
-                
-                insert();   
+                 
+            }
+        }
+        
+        
+        /**************************DELETE****************************/
+
+        if(e.getSource() == deleteButton)             //User clicked delete button 
+        {
+            if(inputValueField.getText().equals(""))  //If no input entered
+            {
+                JOptionPane.showMessageDialog(null, "You must enter in a value." );
+            }
+            else
+            {
+                // error checking for user input 
+                try
+                {
+                    inputValue = Integer.parseInt(inputValueField.getText());
+                    
+                    //Enable step and finish buttons
+                    //stepButton.setEnabled(true);
+                    //finishButton.setEnabled(true);
+                    
+                    //Disable search, delete, and insert buttons
+                    searchButton.setEnabled(false);
+                    insertButton.setEnabled(false);
+                    //deleteButton.setEnabled(false);
+                    
+                    //Assign current node to begin at root
+                    current = root;
+                    
+                    //User is inserting in tree
+                    isDelete = true;
+                    
+                    finishDelete();
+                    
+                    //Reset other buttons
+                    stepButton.setEnabled(false);
+                    finishButton.setEnabled(false);
+                    insertButton.setEnabled(true);
+                    searchButton.setEnabled(true);
+                    deleteButton.setEnabled(true);  
+                }
+                catch (NumberFormatException d)
+                {
+                    //Invalid input given
+                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
+                }
+                 
             }
         }
         
@@ -335,6 +413,11 @@ public class StructViz extends JApplet implements ActionListener
             if(isSearch)  //If user is searching
             {
                 stepSearch();
+            }
+            
+            if(isInsert)   //If user is inserting
+            {
+                stepInsert();
             }
            
         }
@@ -352,6 +435,20 @@ public class StructViz extends JApplet implements ActionListener
                 finishButton.setEnabled(false);
                 stepButton.setEnabled(false);
                 insertButton.setEnabled(true);
+                deleteButton.setEnabled(true);
+            }
+            
+            if(isInsert)
+            {
+                finishInsert();
+                
+                //User done inserting
+                isSearch = false;
+                
+                //Reset other buttons
+                finishButton.setEnabled(false);
+                stepButton.setEnabled(false);
+                searchButton.setEnabled(true);
                 deleteButton.setEnabled(true);
             }
         }
@@ -403,7 +500,131 @@ public class StructViz extends JApplet implements ActionListener
             insertButton.setEnabled(true);
             deleteButton.setEnabled(true);
         }
-        validate(); //what does it this do????????????????????????
+    }
+    
+    public void stepInsert()
+    {
+        Node temp;      // temporary node to hold the new node with the value inserted
+        
+        boolean locationFound; // boolean to keep track of iteration through tree
+        
+        infoField.setText(""); // clear the info field
+        
+        // locationFound = false to start
+        locationFound = false;
+        
+        if(current == null)  // if the tree is empty
+        {
+            locationFound = true;
+        }
+        else if(current.hasKey(inputValue))  //If key already exists in tree
+        {
+        	//Update current step info.
+        	displayComparison();
+            infoField.setText(infoString + " Key already exists in tree.");
+            locationFound = true;
+        }
+        else if(current instanceof Node4) // if it is a node4 it has to be split
+        {
+            // split the current node, current moves up 1 level
+            current = ((Node4)current).splitNode4();
+            
+            //Update current step info.
+            displayComparison();
+            infoField.setText("The previous node has been split. " + infoString);
+            
+            if(current.isRoot()) // if current has no parent
+            {
+                root = current;  // must set root to be this new split parent
+            }
+        }
+        else   //Any other node in the tree
+        {
+            if(!current.isLeaf())  //if current node is not a leaf node
+            {
+                //Find the next node to traverse to
+                current = current.findPath(inputValue);
+                
+                //Update current step info.
+            	displayComparison();
+                infoField.setText(infoString);
+            }
+            else  //reached a leaf node
+            {
+                locationFound = true;
+            }
+        }
+        
+        if(locationFound)  //location to insert is found
+        {
+            if(current == null)  //if tree is empty
+            {
+            	//Update current step info
+                infoField.setText("Tree is empty. Inserting at empty root.");
+                
+                //Insert at root
+                temp = new Node2(inputValue, new Node[]{null, null}, null, new ScaledPoint(.5, .5));
+                root = temp;
+            }
+            else if(current.hasKey(inputValue))   // if the value is in the tree
+            {
+                infoField.setText("Key already exists in tree.");
+            }
+            else  //insert the new node
+            {
+            	infoField.setText("Location to insert is found. Value " + inputValue + " inserted.");
+            	
+                if(current instanceof Node2)   //if the current node is a type Node2
+                {
+                    //Insert key into a new Node3 using Node2's insert node method
+                    temp = ((Node2)current).insertNode(inputValue);
+                    
+                    if(!temp.isRoot())  //if the new inserted node is not the root
+                    {
+                        //Update the parent of the previous node to point to the new inserted node.
+                        temp.getParent().updateChildPtr(current, temp);
+                    }
+                    else  //if new inserted node is still the root
+                    {
+                        root = temp;
+                    }
+                    
+                    //Reassign current node
+                    current = temp;
+                }
+                else if(current instanceof Node3)  //if the current node is a type Node3
+                {
+                    //Insert key into a new Node4 using Node3's insert node method
+                    temp = ((Node3)current).insertNode(inputValue);
+                    
+                    if(!temp.isRoot())  //if the new inserted node is not the root
+                    {
+                        //Update the parent of the previous node to point to the new inserted node.
+                        temp.getParent().updateChildPtr(current, temp);
+                    }
+                    else  //if new inserted node is still the root
+                    {
+                        root = temp;
+                    }
+                    
+                    //Reassign current node
+                    current = temp;
+                }
+                
+            }
+            
+            //User is done inserting
+            isInsert = false;
+            
+            //Reset other buttons
+            stepButton.setEnabled(false);
+            finishButton.setEnabled(false);
+            searchButton.setEnabled(true);
+            deleteButton.setEnabled(true);  
+            
+        }
+        
+        
     }
     
     public void finishSearch()
@@ -432,7 +653,138 @@ public class StructViz extends JApplet implements ActionListener
             displayComparison();
             infoField.setText(infoString + " The value " + inputValue + " has been found.");
         }
-        validate();
+    }
+    
+    public void finishInsert() 
+    {
+        Node temp;      // temporary node to hold the new node with the value inserted
+        
+        boolean locationFound; // boolean to keep track of iteration through tree
+        
+        infoField.setText(""); // clear the info field
+        
+        current = root;
+        
+        // locationFound = false to start
+        locationFound = false;
+        
+        // loop until a leaf is found
+        while(!locationFound)
+        {
+            if(current.hasKey(inputValue))   //If key already exists in tree
+            {
+                locationFound = true;
+            }
+            else if(current instanceof Node4) // if it is a node4 it has to be split
+            {
+                // split the current node, current moves up 1 level
+                current = ((Node4)current).splitNode4();
+                
+                infoField.setText("Split node");
+                
+                if(current.isRoot()) // if current has no parent
+                {
+                    root = current;  // must set root to be this new split parent
+                }
+            }
+            else  //Any other node in the tree
+            {
+                if(!current.isLeaf())    //if current node is not a leaf node
+                {
+                    //Find the next node to traverse to
+                    current = current.findPath(inputValue);
+                }
+                else   //reached a leaf node
+                {
+                    locationFound = true;
+                }
+            }
+        }
+        
+
+        if(current.hasKey(inputValue))   // if the value is already in the tree
+        {
+            infoField.setText("Key already exists in tree.");
+        }
+        else     //insert the new node
+        {
+        	infoField.setText("Location to insert is found. Value " + inputValue + " inserted.");
+        	
+            if(current instanceof Node2)    //if the current node is a type Node2
+            {
+            	//Insert key into a new Node3 using Node2's insert node method
+                temp = ((Node2)current).insertNode(inputValue);
+                
+                if(!temp.isRoot())  //if the new inserted node is not the root
+                {
+                	//Update the parent of the previous node to point to the new inserted node.
+                    temp.getParent().updateChildPtr(current, temp);
+                }
+                else  //if new inserted node is still the root
+                {
+                    root = temp;
+                }
+                
+                //Reassign current node
+                current = temp;
+            }
+            else if(current instanceof Node3)   //if the current node is a type Node3
+            {
+            	//Insert key into a new Node4 using Node3's insert node method
+                temp = ((Node3)current).insertNode(inputValue);
+                
+                if(!temp.isRoot())   //if the new inserted node is not the root
+                {
+                	//Update the parent of the previous node to point to the new inserted node.
+                    temp.getParent().updateChildPtr(current, temp);
+                }
+                else  //if new inserted node is still the root
+                {
+                    root = temp;
+                }
+                
+                //Reassign current node
+                current = temp;
+            }
+            
+        }
+        
+        //User is done inserting
+        isInsert = false;
+        
+        //Reset other buttons
+        stepButton.setEnabled(false);
+        finishButton.setEnabled(false);
+        searchButton.setEnabled(true);
+        deleteButton.setEnabled(true);  
+    }
+    
+    
+    public void finishDelete()
+    {
+    	//Traverse through the tree until no node left or until key is found
+        while(current != null && !current.hasKey(inputValue))
+        {
+            //Keep track of previous node
+            previous = current;
+            
+            //Find the next node to traverse to
+            current = current.findPath(inputValue);
+        }
+        
+        if(current == null)    //If traversed through whole tree
+        {
+            //Update current step info.
+            infoField.setText("The value " + inputValue + " does not exist.");
+        }
+        else if(current.hasKey(inputValue))  //If key has been found
+        {
+            if(current.isLeaf())  // if current node is a leaf
+            {
+                current = current.deleteLeafKey(inputValue);
+            }
+        }
+        
     }
     
     public void displayComparison()
@@ -451,95 +803,6 @@ public class StructViz extends JApplet implements ActionListener
         currentKeys = currentKeys.substring(0, currentKeys.length() - 2);
         infoString = "Now comparing input value " + inputValue + " with node key(s) " + currentKeys + ".";
         infoField.setText(infoString);
-    }
-
-     public void insert() 
-    {
-        Node temp;      // temporary node to hold the new node with the value inserted
-        
-        boolean locationFound; // boolean to keep track of iteration through tree
-        
-        infoField.setText(""); // clear the info field
-        
-        current = root;
-        
-        // locationFound = false to start
-        locationFound = false;
-        
-        // loop until a leaf is found
-        while(!locationFound)
-        {
-            if(current.hasKey(inputValue))
-            {
-                locationFound = true;
-            }
-            // this first part doesn't traverse anything, just splits
-            else if(current instanceof Node4) // if it is a node4 it has to be split
-            {
-                // split the current node, current moves up 1 level
-                current = ((Node4)current).splitNode4();
-                
-                infoField.setText("Split node");
-                
-                if(current.isRoot()) // if current has no parent
-                {
-                    root = current;  // must set root to be this new split parent
-                }
-            }
-            else
-            {
-                if(!current.isLeaf())
-                {
-                    current = current.findPath(inputValue);
-                }
-                else
-                {
-                    locationFound = true;
-                }
-            }
-        }
-        
-        // location has been found
-        
-        // if the value is in the tree
-        if(current.hasKey(inputValue))
-        {
-            infoField.setText("Key already exists in tree.");
-        }
-        else
-        {
-            if(current instanceof Node2)
-            {
-                temp = ((Node2)current).insertNode(inputValue);
-                
-                if(!temp.isRoot())
-                {
-                    temp.getParent().updateChildPtr(current, temp);
-                }
-                
-                current = temp;
-            }
-            else if(current instanceof Node3)
-            {
-                temp = ((Node3)current).insertNode(inputValue);
-                
-                if(!temp.isRoot())
-                {
-                    temp.getParent().updateChildPtr(current, temp);
-                }
-                
-                current = temp;
-            }
-            
-        }
-        
-
-
-        //Reset other buttons
-        stepButton.setEnabled(false);
-        finishButton.setEnabled(false);
-        searchButton.setEnabled(true);
-        deleteButton.setEnabled(true);  
     }
 
 }

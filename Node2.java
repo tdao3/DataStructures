@@ -13,7 +13,7 @@ public class Node2 extends Node
     
     public Node2()
     //POST: A default Node2 object is created with a key set to 1, child nodes and
-    //      parent node set to null, coordinates of 0,0, and lastNode set to false.
+    //      parent node set to null, coordinates of 0,0, lastNode, and selected set to false.
     {
         this(1, null, null, new ScaledPoint(0, 0)); 
     }
@@ -24,7 +24,7 @@ public class Node2 extends Node
     //POST: A Node2 object is created with a key set to key, child nodes set to 
     //      corresponding pointers in children, a parent node set to parent,
     //      and coordinates set to coord, subtreeWidth initialized to 0,
-    //      and lastNode set to false.
+    //      lastNode, and selected set to false.
     {
         int counter;           //counter for for loop
 
@@ -44,6 +44,7 @@ public class Node2 extends Node
         this.coord = coord;
         
         lastNode = false;
+        selected = false;
         
         subtreeWidth = 0;
     }
@@ -53,7 +54,8 @@ public class Node2 extends Node
     //PRE: g and selected are initialized.
     //POST: a rectangle 2 node and connector lines to its children are drawn
     //      and its color is based on whether this node is the current node 
-    //      in the step process or the last node accessed in the stepping process.
+    //      in the step process, the last node accessed in the stepping process,
+    //      or the selected node.
     {
         int nodeX;     // x coord of top left corner of node
         int nodeY;     // y coord of top left corner of node
@@ -61,9 +63,9 @@ public class Node2 extends Node
         nodeX = coord.getX();
         nodeY = coord.getY();
         
-        if(this == current)    //If this is the current node  
+        if(selected)   // if this is the selected node 
         {
-            g.setColor(new Color(120, 255, 120));
+        	g.setColor(new Color(120,255,120));  //green
             g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
         }
         else if(lastNode)   //If this is the last node in the stepping process
@@ -71,7 +73,12 @@ public class Node2 extends Node
             g.setColor(new Color(255, 120, 120));
             g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
         }
-
+        else if(this == current)    //If this is the current node  
+        {
+            g.setColor(new Color(200, 200, 200));   //grey
+            g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
+        }
+        
         //Draw a black rectangle border.
         g.setColor(Color.BLACK);
         g.drawRect(nodeX, nodeY, WIDTH, HEIGHT);

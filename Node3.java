@@ -15,7 +15,7 @@ public class Node3 extends Node
     public Node3()
     //POST: An object of Node3 is created with keys {1,2} 
     //      and no parent or child values (both set to null). coordinates
-    //      of the node are set to 0,0, and lastNode set to false.
+    //      of the node are set to 0,0, lastNode, and selected set to false.
     {
         this(new int[]{1,2}, null, null, new ScaledPoint(0, 0));
     }
@@ -26,7 +26,7 @@ public class Node3 extends Node
     //      null if Node3 has no parent, otherwise initialized. coord is initialized
     //POST: a new Node3 is created with class members keys, children, and parent equal to parameters
     //      keys, children and parent. coordinates of the node set to coord,
-    //      subtreeWidth set to 0, and lastNode set to false.
+    //      subtreeWidth set to 0, lastNode, and selected set to false.
     {
     
         this.keys = new int[2];         //allocate array of keys 
@@ -48,6 +48,7 @@ public class Node3 extends Node
         this.coord = coord;
         
         lastNode = false;
+        selected = false;
         
         subtreeWidth = 0;
     }
@@ -56,7 +57,8 @@ public class Node3 extends Node
     //PRE: g and selected are initialized.
     //POST: a rectangle 3 node and connector lines to its children are drawn
     //      and its color is based on whether this node is the current node 
-    //      in the step process or the last node accessed in the stepping process.
+    //      in the step process or the last node accessed in the stepping process,
+    //      or the selected node.
     {
         int nodeX;      //x coord of top left corner of node
         int nodeY;      //y coord of top left corner of node
@@ -65,15 +67,19 @@ public class Node3 extends Node
         nodeX = coord.getX();
         nodeY = coord.getY();
 
-        if(this == current)    //If this is the current node  
+        if(selected)   // if this is the selected node 
         {
-            g.setColor(new Color(120,255,120)); //when node is selected border is green
+        	g.setColor(new Color(120,255,120));  //green
             g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
-
         }
-        else if(lastNode)    //If this is the last node in the stepping process
+        else if(lastNode)   //If this is the last node in the stepping process
         {
-        	g.setColor(new Color(255, 120, 120));
+            g.setColor(new Color(255, 120, 120));
+            g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
+        }
+        else if(this == current)    //If this is the current node  
+        {
+            g.setColor(new Color(200, 200, 200));   //grey
             g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
         }
     

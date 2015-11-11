@@ -168,6 +168,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         
         //current = nodes[4];
         root = nodes[4];
+        root = null;
     }
     
     //Paint the GUI, and gets the graphics object.   
@@ -188,13 +189,13 @@ public class StructureVisualization extends JApplet implements ActionListener
         
 
         // change the size of the window in ScaledPoint to the current size
-        ScaledPoint.setWindowSize(getWidth(), getHeight());
-        
-        root.getSubtreeWidths();
-        root.repositionNodes();
+        ScaledPoint.setWindowSize(getWidth(), getHeight());        
 
         // draw the tree as long as the root isn't null
-        if(root != null){
+        if(root != null)
+        {
+            root.getSubtreeWidths();
+            root.repositionNodes();
             root.drawTree(g, root, current);
         }
     }
@@ -202,18 +203,22 @@ public class StructureVisualization extends JApplet implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) 
     {
-        //Iterate through the nodes of the tree
-        for(Node n : root.getChildren())
-        {
-            //Set the class member lastNode to false for 
-            //every node in the tree 
-            n.setLastNode(false);
-            for(Node m : n.getChildren())
+    	//Set the class member lastNode and selected to false for 
+        //every node in the tree 
+    	if(root != null)   //if tree is not empty
+    	{
+    	    if(!root.isLeaf())    //if root has children
             {
-                m.setLastNode(false);
+                root.setLastNodeAll();
+                root.setSelectedAll();
             }
-        }
-        
+    	    else  // if root is the only node
+    	    {
+    	        root.setLastNode(false);
+    	        root.setSelected(false);
+    	    }
+    	}
+                
 
         /**************************SEARCH****************************/
 
@@ -244,13 +249,10 @@ public class StructureVisualization extends JApplet implements ActionListener
                       
                       if(current == null)  //If tree is empty
                       {
-                          JOptionPane.showMessageDialog(null, "The value " + inputValue + " is not found." );
                           current = root;
                       }
                       else if(current.hasKey(inputValue))  //If current node contains the key 
                       {
-                          JOptionPane.showMessageDialog(null, "The value " + inputValue + " has been found." );
-                          
                           //Reset other buttons
                           stepButton.setEnabled(false);
                           finishButton.setEnabled(false);
@@ -295,6 +297,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                           deleteButton.setEnabled(true);
                           
                           //User done searching
+                          current.setSelected(true);
                           isSearch = false;
                       }
                       
@@ -338,8 +341,17 @@ public class StructureVisualization extends JApplet implements ActionListener
                     isInsert = true;
                     
                     //Update current step info.
-                	displayComparison();
-                    infoField.setText(infoString);
+                    if(current == null)  //if tree is empty
+                    {
+                        stepInsert();
+                        current = root;
+                    }
+                    else   //tree is not empty
+                    {
+                    	displayComparison();
+                        infoField.setText(infoString);
+                    }
+
                 }
                 catch (NumberFormatException d)
                 {
@@ -483,6 +495,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         {
             //User is done searching
             isSearch = false;
+            current.setSelected(true);
             
             //Update current step info.
             infoField.setText(infoString + " The value " + inputValue + " has been found.");
@@ -506,7 +519,11 @@ public class StructureVisualization extends JApplet implements ActionListener
         // locationFound = false to start
         locationFound = false;
         
-        if(current.hasKey(inputValue))  //If key already exists in tree
+        if(current == null)  // if the tree is empty
+        {
+            locationFound = true;
+        }
+        else if(current.hasKey(inputValue))  //If key already exists in tree
         {
         	//Update current step info.
         	displayComparison();
@@ -546,9 +563,21 @@ public class StructureVisualization extends JApplet implements ActionListener
         
         if(locationFound)  //location to insert is found
         {
-            if(current.hasKey(inputValue))   // if the value is in the tree
+            if(current == null)  //if tree is empty
+            {
+            	//Update current step info
+                infoField.setText("Tree is empty. Inserting at empty root.");
+                
+                //Insert at root
+                temp = new Node2(inputValue, new Node[]{null, null}, null, new ScaledPoint(.5, .5));
+                root = temp;
+                root.setSelected(true);
+            }
+            else if(current.hasKey(inputValue))   // if the value is in the tree
             {
                 infoField.setText("Key already exists in tree.");
+                current.setSelected(false);
+                current.setLastNode(true);
             }
             else  //insert the new node
             {
@@ -564,9 +593,14 @@ public class StructureVisualization extends JApplet implements ActionListener
                         //Update the parent of the previous node to point to the new inserted node.
                         temp.getParent().updateChildPtr(current, temp);
                     }
+                    else  //if new inserted node is still the root
+                    {
+                        root = temp;
+                    }
                     
                     //Reassign current node
                     current = temp;
+                    current.setSelected(true);
                 }
                 else if(current instanceof Node3)  //if the current node is a type Node3
                 {
@@ -578,9 +612,14 @@ public class StructureVisualization extends JApplet implements ActionListener
                         //Update the parent of the previous node to point to the new inserted node.
                         temp.getParent().updateChildPtr(current, temp);
                     }
+                    else  //if new inserted node is still the root
+                    {
+                        root = temp;
+                    }
                     
                     //Reassign current node
                     current = temp;
+                    current.setSelected(true);
                 }
                 
             }
@@ -621,6 +660,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         }
         else if(current.hasKey(inputValue))  //If key has been found
         {
+            current.setSelected(true);
             //Update current step info.
             displayComparison();
             infoField.setText(infoString + " The value " + inputValue + " has been found.");
@@ -677,6 +717,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         if(current.hasKey(inputValue))   // if the value is already in the tree
         {
             infoField.setText("Key already exists in tree.");
+            current.setLastNode(true);
         }
         else     //insert the new node
         {
@@ -692,9 +733,14 @@ public class StructureVisualization extends JApplet implements ActionListener
                 	//Update the parent of the previous node to point to the new inserted node.
                     temp.getParent().updateChildPtr(current, temp);
                 }
+                else  //if new inserted node is still the root
+                {
+                    root = temp;
+                }
                 
                 //Reassign current node
                 current = temp;
+                current.setSelected(true);
             }
             else if(current instanceof Node3)   //if the current node is a type Node3
             {
@@ -706,9 +752,14 @@ public class StructureVisualization extends JApplet implements ActionListener
                 	//Update the parent of the previous node to point to the new inserted node.
                     temp.getParent().updateChildPtr(current, temp);
                 }
+                else  //if new inserted node is still the root
+                {
+                    root = temp;
+                }
                 
                 //Reassign current node
                 current = temp;
+                current.setSelected(true);
             }
             
         }
@@ -740,12 +791,14 @@ public class StructureVisualization extends JApplet implements ActionListener
         {
             //Update current step info.
             infoField.setText("The value " + inputValue + " does not exist.");
+            previous.setLastNode(true);
         }
         else if(current.hasKey(inputValue))  //If key has been found
         {
             if(current.isLeaf())  // if current node is a leaf
             {
                 current = current.deleteLeafKey(inputValue);
+                current.setSelected(true);
             }
         }
         

@@ -21,6 +21,9 @@ public abstract class Node
     protected boolean lastNode;   // true if node was the last node in the stepping process,
                                   // false otherwise
     
+    protected boolean selected;   // true if node is found during search, or is the inserted node
+                                  // false otherwise
+    
     protected ScaledPoint coord;  // used to represent location of node based on varying applet size
 
     public abstract void drawNode(Graphics g, Node current); // subclasses draws the corresponding node 
@@ -145,6 +148,12 @@ public abstract class Node
     {
         this.lastNode = lastNode;
     }
+   
+    public void setSelected(boolean selected)
+    // POST: class member selected is set to parameter selected
+    {
+        this.selected = selected;
+    }
     
     public int getSubtreeWidths()
     // POST: FCTVAL == the width of the subtree of the Node that this method
@@ -188,6 +197,24 @@ public abstract class Node
             for(Node n : children)
             {
                n.setLastNodeAll();
+            }     
+    	}
+  
+    }
+    
+    public void setSelectedAll()
+    //PRE: Must be called by a root node object.
+    //POST: Recursively traverse through every node in the tree and set class
+    //      member selected to false.
+    {
+    	selected = false;
+    	
+    	if(!isLeaf())  // if this node has children
+    	{
+    		// iterate through each child and set selected to false
+            for(Node n : children)
+            {
+               n.setSelectedAll();
             }     
     	}
   

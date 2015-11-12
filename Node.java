@@ -288,7 +288,56 @@ public abstract class Node
     }
     
     public int getNodeHeight()
+    // POST: FCTVAL == the height of a node to be drawn 
     {
         return SQUARE_DIMENSION.getMin();
+    }
+    
+    public int getIndexOf(int key)
+    // PRE:  key is initialized
+    // POST: FCTVAL == the index in the keys array of key, or -1 if it's not found
+    {
+        // iterate through keys
+        for(int i = 0; i < keys.length; i++)
+        {
+            if(keys[i] == key) // if key is found
+            {
+                return i;
+            }
+        }
+        
+        return -1;
+    }
+    
+    public int getIndexOf(Node n)
+    // PRE:  n is initialized
+    // POST: FCTVAL == the index in the children array of node n, or -1 if it's not found
+    {
+        // iterate through children
+        for(int i = 0; i < keys.length; i++)
+        {
+            if(children[i] == n) // if key is found
+            {
+                return i;
+            }
+        }
+        
+        return -1;
+    }
+    
+    public void replaceKey(int oldKey, int newKey)
+    // PRE:  oldKey is in the array of keys already, newKey is initialized
+    //       and by replacing oldKey with newKey, it will not mess up the 
+    //       structure of the tree
+    // POST: oldKey inside the keys array is replaced with newKey
+    {
+        // iterate through keys
+        for(int i = 0; i < keys.length; i++)
+        {
+            if(keys[i] == oldKey)
+            {
+                keys[i] = newKey;
+            }
+        }
     }
 }

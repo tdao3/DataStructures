@@ -66,6 +66,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         //Set the original GUI size.
         setSize(800,680);                                        
         setLayout(new BorderLayout());        
+
         
         String structureName = "<html><FONT COLOR=RED>2-</FONT>" +
         		               "<FONT COLOR=GREEN>3-</FONT>"
@@ -217,7 +218,11 @@ public class StructureVisualization extends JApplet implements ActionListener
         
 
         // change the size of the window in ScaledPoint to the current size
+<<<<<<< HEAD
         ScaledPoint.setWindowSize(getWidth(), getHeight());        
+=======
+        ScaledPoint.setWindowSize(getWidth(), getHeight());  
+>>>>>>> parent of 2c13251... Fixed Rotation
         
         // draw the tree as long as the root isn't null
         if(root != null)
@@ -612,7 +617,11 @@ public class StructureVisualization extends JApplet implements ActionListener
         {
             if(current == null)  //if tree is empty
             {
+<<<<<<< HEAD
             	  //Update current step info
+=======
+            	//Update current step info
+>>>>>>> parent of 2c13251... Fixed Rotation
                 infoField.setText("Tree is empty. Inserting " + inputValue + " to root");
                 
                 //Insert at root
@@ -845,18 +854,11 @@ public class StructureVisualization extends JApplet implements ActionListener
         }
         else if(current.hasKey(inputValue))  //If key has been found
         {
-            
-                if((current instanceof Node3 || current instanceof Node3) && current.isLeaf())
-                {
-                	current = current.deleteLeafKey(inputValue);
-                    current.setSelected(true);
-                }
-                else if(current instanceof Node2 && !current.isLeaf())
-                {
-                	current = ((Node2)current).performRotation();
-                    current.setSelected(true);
-                }
-                
+            if(current.isLeaf())  // if current node is a leaf
+            {
+                current = current.deleteLeafKey(inputValue);
+                current.setSelected(true);
+            }
         }
         
     }

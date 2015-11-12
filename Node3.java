@@ -191,11 +191,11 @@ public class Node3 extends Node
         return updatedNode;
     }
     
-    public Node4 mergeNode2Children(int key)
+    public Node2 mergeNode2Children(int key)
     // PRE:  key is a key in this node, and the two children on either side of it
     //       are both Node2
     // POST: a new Node4 is created consisting of this node's left child, this node,
-    //       and this node's right child. FCTVAL == the new Node4 created.
+    //       and this node's right child. FCTVAL == the new Node2 parent created.
     {
         Node4 newChild;      // new child node being created from the merge of 2 Node2s
                              // and key from this Node4
@@ -260,7 +260,7 @@ public class Node3 extends Node
             parent.updateChildPtr(this, newParent);
         }
                          
-        return newChild;
+        return newParent;
     }
     
     public Node findPath(int n)

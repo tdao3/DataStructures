@@ -209,11 +209,11 @@ public class Node2 extends Node
     //POST: FCTVAL = children[0] Node if n is less than key[0] otherwise
     //      children[1].
     {
-        if(n < keys[0])
+        if(n < keys[0])   // if n is less than this node's key
         {
             return children[0];
         }
-        else
+        else    //  n is greater than or equal to this node's key
         {
             return children[1];
         }
@@ -253,7 +253,10 @@ public class Node2 extends Node
         return newNode;
     }
 
-	public Node performRotation() 
+	public void performRotation() 
+	//PRE: This node must have a sibling with 2 or more keys.
+    //POST: Depending on the situation between this node, its siblings, and its parent, 
+	//      the node will perform a rotation with a sibling that has 2 or more keys. 
 	{
 		Node sibling;     //Sibling of this node
 		Node newSibling;  //New sibling node if rotation occurs
@@ -264,9 +267,8 @@ public class Node2 extends Node
 		newSibling = null;
 		newKeys = null;
 		
-        //Case 1: check if we can steal a key from a sibling Node3 or Node4
-		//        or if fusion must take place
-		
+        //Find the relation between this node's sibling and parent,
+		//then do the proper rotation.
 		if(parent instanceof Node2)  // if parent is a Node2
 		{
 		    if(keys[0] < parent.getKeys()[0])  // if this node is the left child of the parent
@@ -375,122 +377,163 @@ public class Node2 extends Node
 		        }
 		    }
 		}
-		return this;
         
 	}
 	
-	private void siblingNode3Rotation(Node sibling, Node newSibling, int[] newKeys, boolean leftSibling, boolean middleChild, boolean rightChild)
-	{
-	    Node3 newChild;     // New child if this is an internal rotation
-	    int[] newChildKeys; 
+	private void siblingNode3Rotation(Node sibling, Node newSibling, int[] newKeys, 
+                                      boolean leftSibling, boolean middleChild, boolean rightChild)
+    //PRE: sibling is initialized, newSibling, and newKeys are declared. leftSibling, 
+    //     middleChild, and rightChild are initialized.
+    //POST: A rotation in the tree with this node occurs with a sibling Node3 node. The details of the 
+    //      rotation depend on the relationship between this node, its sibling, and their parent. This
+    //      relationship is represented by the boolean parameters leftSibling, middleChild, and 
+    //      rightChild.
+    {
+	    Node3 newChild;       //New node that this node will transform into.
+	    int[] newChildKeys;   //New keys for the newChild node.
 	    
 	    newChildKeys = new int[2];
 	    
-	    //Allocate key for a Node2 object sibling
+	    //Allocate key for a Node2 object sibling.
         newKeys = new int[1];
         
-	    if(leftSibling)   // if this sibling is a left sibling
+	    if(leftSibling)   // if the sibling is to the left of this node
 	    {
 	        if(rightChild) // if this node is the rightmost child of a Node3 parent
 	        {
+	            //Reassign key values between parent and child.
 	        	newChildKeys[0] = parent.getKeys()[1];
                 parent.getKeys()[1] = sibling.getKeys()[1];
 	        }
 	        else  // this node is a right child of a Node2 parent
 	        {
+	        	//Reassign key values between parent and child.
 	        	newChildKeys[0] = parent.getKeys()[0];
                 parent.getKeys()[0] = sibling.getKeys()[1]; 
 	        }
 	        
+	        //Perform rotation of values and children.
 	        newChildKeys[1] = keys[0];
 	        newKeys[0] = sibling.getKeys()[0];
-            newSibling = new Node2(newKeys[0], new Node[]{sibling.getChildren()[0], sibling.getChildren()[1]}, parent, sibling.getCoord());
-            newChild = new Node3(newChildKeys, new Node[]{sibling.getChildren()[2], children[0], children[1]}, parent, coord);
+            newSibling = new Node2(newKeys[0], new Node[]{sibling.getChildren()[0], 
+                                   sibling.getChildren()[1]}, parent, sibling.getCoord());
+            newChild = new Node3(newChildKeys, new Node[]{sibling.getChildren()[2], 
+                                 children[0], children[1]}, parent, coord);
+            
+            //Update parent to point to this newly transformed node.
             parent.updateChildPtr(this, newChild);
             
+            //Update the children parent pointers for the sibling and this newly transformed node.
             sibling.getChildren()[0].setParent(newSibling);
             sibling.getChildren()[1].setParent(newSibling);
             sibling.getChildren()[2].setParent(newChild);
+            
+            //Update children of this node to point to newly transformed node.
             for(Node n : children)
             {
                 n.setParent(newChild);
             }	
          
 	    }
-	    else   // this sibling is a right sibling
+	    else   // the sibling is to the right of this node
 	    {
 	        if(middleChild) // if this node is the middle child of a Node3 parent
 	        {
+	        	//Reassign key values between parent and child.
                 newChildKeys[1] = parent.getKeys()[1]; 
 	        }
 	        else  // this node is a left child of a Node2 parent
 	        {
+	        	//Reassign key values between parent and child.
                 newChildKeys[1] = parent.getKeys()[0];
 	        } 
 	        
+	        //Perform rotation of values and children.
 	        newChildKeys[0] = keys[0];
 	        parent.getKeys()[0] = sibling.getKeys()[0];
 	        newKeys[0] = sibling.getKeys()[1];
-            newSibling = new Node2(newKeys[0], new Node[]{sibling.getChildren()[1], sibling.getChildren()[2]}, parent, sibling.getCoord());
-            newChild = new Node3(newChildKeys, new Node[]{children[0], children[1], sibling.getChildren()[0]}, parent, coord);
+            newSibling = new Node2(newKeys[0], new Node[]{sibling.getChildren()[1], 
+                                   sibling.getChildren()[2]}, parent, sibling.getCoord());
+            newChild = new Node3(newChildKeys, new Node[]{children[0], children[1], 
+                                 sibling.getChildren()[0]}, parent, coord);
+            
+            //Update parent to point to this newly transformed node.
             parent.updateChildPtr(this, newChild);
             
+            //Update the children parent pointers for the sibling and this newly transformed node.
             sibling.getChildren()[0].setParent(newChild);
             sibling.getChildren()[1].setParent(newSibling);
             sibling.getChildren()[2].setParent(newSibling);
+            
+            //Update children of this node to point to newly transformed node.
             for(Node n : children)
             {
                 n.setParent(newChild);
             }
 	    }
 	    
-	    //Have the old sibling parent point to the new one
+	    //Have the old sibling parent point to the new sibling.
         parent.updateChildPtr(sibling, newSibling);
 	}
 	
 	
-	private void siblingNode4Rotation(Node sibling, Node newSibling, int[] newKeys, boolean leftSibling, boolean middleChild, boolean rightChild)
-	{
-		Node3 newChild;     // New child if this is an internal rotation
-	    int[] newChildKeys; 
+	private void siblingNode4Rotation(Node sibling, Node newSibling, int[] newKeys, 
+                                      boolean leftSibling, boolean middleChild, boolean rightChild)
+    //PRE: sibling is initialized, newSibling, and newKeys are declared. leftSibling, 
+    //     middleChild, and rightChild are initialized.
+    //POST: A rotation in the tree with this node occurs with a sibling Node4 node. The details of the 
+    //      rotation depend on the relationship between this node, its sibling, and their parent. This
+    //      relationship is represented by the boolean parameters leftSibling, middleChild, and 
+    //      rightChild.
+    {
+	    Node3 newChild;       //New node that this node will transform into.
+	    int[] newChildKeys;   //New keys for the newChild node.
 	    
 	    newChildKeys = new int[2];
 		
 	    //Allocate new keys for a Node3 object
         newKeys = new int[2];
         
-	    if(leftSibling)   // if this sibling is a left sibling
+	    if(leftSibling)   // if the sibling is to the left of this node
 	    {
 	        if(rightChild) // if this node is the rightmost child of a Node3 parent
 	        {
+	        	//Reassign key values between parent and child.
 	            newChildKeys[0] = parent.getKeys()[1];
                 parent.getKeys()[1] = sibling.getKeys()[2];
 	        }
 	        else  // this node is a right child of a Node2 parent
 	        {
+	        	//Reassign key values between parent and child.
 	        	newChildKeys[0] = parent.getKeys()[0];
                 parent.getKeys()[0] = sibling.getKeys()[2];
-               
 	        }
 	        
+            //Perform rotation of values and children.
 	        newChildKeys[1] = keys[0];
 	        newKeys[0] = sibling.getKeys()[0];
             newKeys[1] = sibling.getKeys()[1];
-            newSibling = new Node3(newKeys, new Node[]{sibling.getChildren()[0], sibling.getChildren()[1], sibling.getChildren()[2]}, parent, sibling.getCoord());
+            newSibling = new Node3(newKeys, new Node[]{sibling.getChildren()[0], sibling.getChildren()[1], 
+                                   sibling.getChildren()[2]}, parent, sibling.getCoord());
             newChild = new Node3(newChildKeys, new Node[]{ sibling.getChildren()[3], children[0], children[1]}, parent, coord);
+            
+            //Update parent to point to this newly transformed node.
             parent.updateChildPtr(this, newChild);
             
+            //Update the children parent pointers for the sibling and this newly transformed node.
             sibling.getChildren()[0].setParent(newSibling);
             sibling.getChildren()[1].setParent(newSibling);
             sibling.getChildren()[2].setParent(newSibling);
             sibling.getChildren()[3].setParent(newChild);
+            
+            //Update children of this node to point to newly transformed node.
             for(Node n : children)
             {
                 n.setParent(newChild);
             }
          
 	    }
-	    else   // this sibling is a right sibling
+	    else   // the sibling is to the right of this node
 	    {
 	        if(middleChild) // if this node is the middle child of a Node3 parent
 	        {
@@ -498,23 +541,29 @@ public class Node2 extends Node
                 parent.getKeys()[1] = sibling.getKeys()[0];
 	        }
 	        else  // this node is a left child of a Node2 parent
-	        {
-	            
+	        { 
                 newChildKeys[1] = parent.getKeys()[0];
-                parent.getKeys()[0] = sibling.getKeys()[0];
-                
+                parent.getKeys()[0] = sibling.getKeys()[0];  
 	        } 
+	        
+	        //Perform rotation of values and children.
 	        newChildKeys[0] = keys[0];
 	        newKeys[0] = sibling.getKeys()[1];
             newKeys[1] = sibling.getKeys()[2];
-            newSibling = new Node3(newKeys, new Node[]{sibling.getChildren()[1], sibling.getChildren()[2], sibling.getChildren()[3]}, parent, sibling.getCoord());
+            newSibling = new Node3(newKeys, new Node[]{sibling.getChildren()[1], sibling.getChildren()[2], 
+                                   sibling.getChildren()[3]}, parent, sibling.getCoord());
             newChild = new Node3(newChildKeys, new Node[]{children[0], children[1], sibling.getChildren()[0]}, parent, coord);
+            
+            //Update parent to point to this newly transformed node.
             parent.updateChildPtr(this, newChild);
             
+            //Update the children parent pointers for the sibling and this newly transformed node.
             sibling.getChildren()[0].setParent(newChild);
             sibling.getChildren()[1].setParent(newSibling);
             sibling.getChildren()[2].setParent(newSibling);
             sibling.getChildren()[3].setParent(newSibling);
+            
+            //Update children of this node to point to newly transformed node.
             for(Node n : children)
             {
                 n.setParent(newChild);

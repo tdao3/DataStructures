@@ -167,6 +167,42 @@ public class Node2 extends Node
         return updatedNode;
     }
 
+	public Node4 mergeNode2Children()
+    // PRE:  the two children of this node are both Node2
+    // POST: a new Node4 is created consisting of this node's left child, this node,
+    //       and this node's right child. FCTVAL == the new Node4 created.
+    {
+        Node4 newNode;      // new node being created from the merge of 3 Node2s
+        
+        newNode = new Node4(new int[]{children[0].getKeys()[0],
+                                      keys[0],
+                                      children[1].getKeys()[0]},
+                            new Node[]{children[0].getChildren()[0],
+                                       children[0].getChildren()[1],
+                                       children[1].getChildren()[0],
+                                       children[1].getChildren()[1]},
+                            parent,
+                            new ScaledPoint());
+                                
+        if(!newNode.isLeaf()) // if this node isn't a leaf
+        {
+            // iterate through the children and update the parent pointers
+            // to point back to newNode
+            for(Node n : newNode.getChildren())
+            {
+                n.setParent(newNode);
+            }
+        }
+        
+        if(!newNode.isRoot()) // if this node isn't the root
+        {
+            // update the parent's child pointer to the newNode
+            parent.updateChildPtr(this, newNode);
+        }
+                         
+        return newNode;
+    }
+	
     @Override
     public Node findPath(int n) 
     //PRE:  n is initialized.

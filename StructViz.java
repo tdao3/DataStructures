@@ -109,14 +109,14 @@ public class StructViz extends JApplet implements ActionListener
         stepButton.setEnabled(false);
         finishButton.setEnabled(false);
         
-        //Add components to top row of buttons and text field.
-        topButtonRow.add(insertButton);
-        topButtonRow.add(searchButton);
-        topButtonRow.add(deleteButton);
-        
-        //Add components to middle row of input label and text field.
-        middleInputRow.add(inputLabel);
-        middleInputRow.add(inputValueField);
+        //Add components to top row of input label and text field.
+        topButtonRow.add(inputLabel);
+        topButtonRow.add(inputValueField);
+
+        //Add components to middle row of buttons and text field.
+        middleInputRow.add(insertButton);
+        middleInputRow.add(searchButton);
+        middleInputRow.add(deleteButton);
         
         //Add components to bottom row of buttons.
         bottomButtonRow.add(stepButton);

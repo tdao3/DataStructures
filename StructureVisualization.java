@@ -1,7 +1,9 @@
-/*
-Team: 2-3-4 Trio
-Members: TO, TD, AB
-*/
+// Programmer:  TO, AB, TD
+// Assignment:  Group Project 2
+// Date:        November 8th, 2015
+// Description: The class models one type of node that will be placed into the tree. Node3
+//              has exactly three children and two key values
+//
 
 
 import java.awt.FlowLayout;
@@ -13,6 +15,7 @@ import javax.swing.JApplet;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color; 
+import java.awt.Dimension;
 
 public class StructureVisualization extends JApplet implements ActionListener
 {
@@ -90,11 +93,13 @@ public class StructureVisualization extends JApplet implements ActionListener
         //Initialize text fields.
         inputValueField = new JTextField(10);
         infoField = new JTextField(50);
+        infoField.setPreferredSize( new Dimension( 80, 30) );
         infoField.setEditable(false);
         
         //Initialize labels.
         inputLabel = new JLabel("Enter integer:");
         infoLabel = new JLabel("Current Step:");
+        infoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
         structureLabel = new JLabel(structureName);
         structureLabel.setFont(new Font("Serif", Font.PLAIN, 40));
         
@@ -126,14 +131,14 @@ public class StructureVisualization extends JApplet implements ActionListener
         stepButton.setEnabled(false);
         finishButton.setEnabled(false);
         
-        //Add components to top row of buttons and text field.
-        topButtonRow.add(insertButton);
-        topButtonRow.add(searchButton);
-        topButtonRow.add(deleteButton);
-        
-        //Add components to middle row of input label and text field.
-        middleInputRow.add(inputLabel);
-        middleInputRow.add(inputValueField);
+        //Add components to top row of input label and text field.
+        topButtonRow.add(inputLabel);
+        topButtonRow.add(inputValueField);
+
+        //Add components to middle row of buttons and text field.
+        middleInputRow.add(insertButton);
+        middleInputRow.add(searchButton);
+        middleInputRow.add(deleteButton);
         
         //Add components to bottom row of buttons.
         bottomButtonRow.add(stepButton);
@@ -156,7 +161,6 @@ public class StructureVisualization extends JApplet implements ActionListener
         add(northPanel, BorderLayout.NORTH);
         add(drawingArea, BorderLayout.CENTER);
        
-        
         // testing drawing nodes
         nodes = new Node[13];
         
@@ -197,7 +201,7 @@ public class StructureVisualization extends JApplet implements ActionListener
     public void paint(Graphics g)
     {
         super.paint(g);    
-        
+
         if(isSearch || isInsert)    //If user is searching or inserting in tree
         { 
             //Disable input text field.

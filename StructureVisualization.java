@@ -43,6 +43,7 @@ public class StructureVisualization extends JApplet implements ActionListener
     private int drawAreaHeight;          // Height of JPanel drawingArea used for drawing tree.
     private int drawAreaWidth;           // Width of JPanel drawingArea  used for drawing tree.
     private int inputValue;              // Integer value entered by the user.
+    private int numNodes;
     
     private boolean isSearch;            // True if user is searching through tree
                                          // false otherwise.
@@ -80,6 +81,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         isInsert = false;
         isDelete = false;
         inputValue = 0;
+        numNodes = 0;
         currentKeys = "";
         infoString = "";
         
@@ -97,7 +99,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         infoField.setEditable(false);
         
         //Initialize labels.
-        inputLabel = new JLabel("Enter integer:");
+        inputLabel = new JLabel("Enter 3-digit integer:");
         infoLabel = new JLabel("Current Step:");
         infoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
         structureLabel = new JLabel(structureName);
@@ -216,7 +218,8 @@ public class StructureVisualization extends JApplet implements ActionListener
 
         // change the size of the window in ScaledPoint to the current size
         ScaledPoint.setWindowSize(getWidth(), getHeight());        
-
+        Node.updateNodeSize(numNodes);
+        
         // draw the tree as long as the root isn't null
         if(root != null)
         {
@@ -258,8 +261,14 @@ public class StructureVisualization extends JApplet implements ActionListener
             {
                 //Check if input is a valid integer 
                 try{
-                      inputValue = Integer.parseInt(inputValueField.getText());
-                        
+                      //Check valid input
+                      inputValue = Integer.parseInt(inputValueField.getText());      
+                      
+                      if(Integer.toString(inputValue).length() > 3)   //if input is greater than 3 digits
+                      {
+                          throw new NumberFormatException();
+                      }
+                      
                       //Enable step and finish buttons
                       stepButton.setEnabled(true);
                       finishButton.setEnabled(true);
@@ -331,7 +340,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                     catch (NumberFormatException d) 
                     {
                         //Invalid input given
-                        JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
+                        JOptionPane.showMessageDialog(null, "Invalid input. Please enter a 3-digit integer." );
                     }
             }
         }
@@ -350,7 +359,13 @@ public class StructureVisualization extends JApplet implements ActionListener
                 // error checking for user input 
                 try
                 {
-                    inputValue = Integer.parseInt(inputValueField.getText());
+                	//Check valid input
+                    inputValue = Integer.parseInt(inputValueField.getText());  
+                    
+                    if(Integer.toString(inputValue).length() > 3)   //if input is greater than 3 digits
+                    {
+                        throw new NumberFormatException();
+                    }
                     
                     //Enable step and finish buttons
                     stepButton.setEnabled(true);
@@ -382,7 +397,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                 catch (NumberFormatException d)
                 {
                     //Invalid input given
-                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
+                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter a 3-digit integer." );
                 }
                  
             }
@@ -402,7 +417,13 @@ public class StructureVisualization extends JApplet implements ActionListener
                 // error checking for user input 
                 try
                 {
-                    inputValue = Integer.parseInt(inputValueField.getText());
+                	//Check valid input
+                    inputValue = Integer.parseInt(inputValueField.getText());  
+                    
+                    if(Integer.toString(inputValue).length() > 3)   //if input is greater than 3 digits
+                    {
+                        throw new NumberFormatException();
+                    }
                     
                     //Enable step and finish buttons
                     //stepButton.setEnabled(true);
@@ -431,7 +452,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                 catch (NumberFormatException d)
                 {
                     //Invalid input given
-                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter an integer." );
+                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter a 3-digit integer." );
                 }
                  
             }
@@ -598,6 +619,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                 temp = new Node2(inputValue, new Node[]{null, null}, null, new ScaledPoint(.5, .5));
                 root = temp;
                 root.setSelected(true);
+                numNodes++;
             }
             else if(current.hasKey(inputValue))   // if the value is in the tree
             {
@@ -608,6 +630,7 @@ public class StructureVisualization extends JApplet implements ActionListener
             else  //insert the new node
             {
             	infoField.setText("Location to insert is found. Value " + inputValue + " inserted.");
+            	numNodes++;
             	
                 if(current instanceof Node2)   //if the current node is a type Node2
                 {
@@ -748,6 +771,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         else     //insert the new node
         {
         	infoField.setText("Location to insert is found. Value " + inputValue + " inserted.");
+        	numNodes++;
         	
             if(current instanceof Node2)    //if the current node is a type Node2
             {

@@ -66,6 +66,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         //Set the original GUI size.
         setSize(800,680);                                        
         setLayout(new BorderLayout());        
+
         
         String structureName = "<html><FONT COLOR=RED>2-</FONT>" +
         		               "<FONT COLOR=GREEN>3-</FONT>"
@@ -95,7 +96,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         //Initialize text fields.
         inputValueField = new JTextField(10);
         infoField = new JTextField(50);
-        infoField.setPreferredSize( new Dimension( 80, 30) );
+        infoField.setFont(new Font("Serif", Font.PLAIN, 16));
         infoField.setEditable(false);
         
         //Initialize labels.

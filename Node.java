@@ -199,7 +199,7 @@ public abstract class Node
         
         if(numNodes >= 10)
         {
-            newDimension = .1 - (numNodes*.002);
+            newDimension = .091 - (numNodes*.0021);
             SQUARE_DIMENSION = new ScaledPoint(newDimension, newDimension);
         }
         
@@ -252,7 +252,7 @@ public abstract class Node
         {
             // set it at the top middle of the screen
             coord = new ScaledPoint(.5, .25);
-            coord.setY(200); // stay offset below top panel
+            coord.setY(225); // stay offset below top panel
             // shift over slightly so it is centered on screen
             coord.setX(coord.getX() - (getNodeWidth()/2));
         }

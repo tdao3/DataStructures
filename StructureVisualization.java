@@ -68,13 +68,13 @@ public class StructureVisualization extends JApplet implements ActionListener
         setLayout(new BorderLayout());        
         
         String structureName = "<html><FONT COLOR=RED>2-</FONT>" +
-                               "<FONT COLOR=GREEN>3-</FONT>"
-                               + "<FONT COLOR=BLUE>4</FONT>"
-                               + "<FONT COLOR=RED> T</FONT>"
-                               + "<FONT COLOR=YELLOW>r</FONT>"
-                               + "<FONT COLOR=BLUE>e</FONT>"
-                               + "<FONT COLOR=PURPLE>e</FONT>"
-                               + "</html>";
+        		               "<FONT COLOR=GREEN>3-</FONT>"
+        		               + "<FONT COLOR=BLUE>4</FONT>"
+        		               + "<FONT COLOR=RED> T</FONT>"
+        		               + "<FONT COLOR=YELLOW>r</FONT>"
+        		               + "<FONT COLOR=BLUE>e</FONT>"
+        		               + "<FONT COLOR=PURPLE>e</FONT>"
+        		               + "</html>";
         
         //Initialize default values.
         isSearch = false;
@@ -232,21 +232,21 @@ public class StructureVisualization extends JApplet implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) 
     {
-        //Set the class member lastNode and selected to false for 
+    	//Set the class member lastNode and selected to false for 
         //every node in the tree 
-        if(root != null)   //if tree is not empty
-        {
-            if(!root.isLeaf())    //if root has children
+    	if(root != null)   //if tree is not empty
+    	{
+    	    if(!root.isLeaf())    //if root has children
             {
                 root.setLastNodeAll();
                 root.setSelectedAll();
             }
-            else  // if root is the only node
-            {
-                root.setLastNode(false);
-                root.setSelected(false);
-            }
-        }
+    	    else  // if root is the only node
+    	    {
+    	        root.setLastNode(false);
+    	        root.setSelected(false);
+    	    }
+    	}
                 
 
         /**************************SEARCH****************************/
@@ -359,7 +359,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                 // error checking for user input 
                 try
                 {
-                    //Check valid input
+                	//Check valid input
                     inputValue = Integer.parseInt(inputValueField.getText());  
                     
                     if(Integer.toString(inputValue).length() > 3)   //if input is greater than 3 digits
@@ -389,7 +389,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                     }
                     else   //tree is not empty
                     {
-                        displayComparison();
+                    	displayComparison();
                         infoField.setText(infoString);
                     }
 
@@ -417,7 +417,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                 // error checking for user input 
                 try
                 {
-                    //Check valid input
+                	//Check valid input
                     inputValue = Integer.parseInt(inputValueField.getText());  
                     
                     if(Integer.toString(inputValue).length() > 3)   //if input is greater than 3 digits
@@ -440,7 +440,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                     //User is inserting in tree
                     isDelete = true;
                     
-                    finishDelete(inputValue);
+                    finishDelete();
                     
                     //Reset other buttons
                     stepButton.setEnabled(false);
@@ -572,8 +572,8 @@ public class StructureVisualization extends JApplet implements ActionListener
         }
         else if(current.hasKey(inputValue))  //If key already exists in tree
         {
-            //Update current step info.
-            displayComparison();
+        	//Update current step info.
+        	displayComparison();
             infoField.setText(String.format("%d already exists in tree", inputValue));
             locationFound = true;
         }
@@ -599,7 +599,7 @@ public class StructureVisualization extends JApplet implements ActionListener
                 current = current.findPath(inputValue);
                 
                 //Update current step info.
-                  displayComparison();
+            	  displayComparison();
                 infoField.setText(infoString);
             }
             else  //reached a leaf node
@@ -612,7 +612,7 @@ public class StructureVisualization extends JApplet implements ActionListener
         {
             if(current == null)  //if tree is empty
             {
-                  //Update current step info
+            	  //Update current step info
                 infoField.setText("Tree is empty. Inserting " + inputValue + " to root");
                 
                 //Insert at root
@@ -629,9 +629,9 @@ public class StructureVisualization extends JApplet implements ActionListener
             }
             else  //insert the new node
             {
-                infoField.setText("Location to insert found. " + inputValue + " inserted.");
-                numNodes++;
-                
+            	infoField.setText("Location to insert found. " + inputValue + " inserted.");
+            	numNodes++;
+            	
                 if(current instanceof Node2)   //if the current node is a type Node2
                 {
                     //Insert key into a new Node3 using Node2's insert node method
@@ -770,17 +770,17 @@ public class StructureVisualization extends JApplet implements ActionListener
         }
         else     //insert the new node
         {
-            infoField.setText("Location to insert is found. Value " + inputValue + " inserted.");
-            numNodes++;
-            
+        	infoField.setText("Location to insert is found. Value " + inputValue + " inserted.");
+        	numNodes++;
+        	
             if(current instanceof Node2)    //if the current node is a type Node2
             {
-                //Insert key into a new Node3 using Node2's insert node method
+            	//Insert key into a new Node3 using Node2's insert node method
                 temp = ((Node2)current).insertNode(inputValue);
                 
                 if(!temp.isRoot())  //if the new inserted node is not the root
                 {
-                    //Update the parent of the previous node to point to the new inserted node.
+                	//Update the parent of the previous node to point to the new inserted node.
                     temp.getParent().updateChildPtr(current, temp);
                 }
                 else  //if new inserted node is still the root
@@ -794,12 +794,12 @@ public class StructureVisualization extends JApplet implements ActionListener
             }
             else if(current instanceof Node3)   //if the current node is a type Node3
             {
-                //Insert key into a new Node4 using Node3's insert node method
+            	//Insert key into a new Node4 using Node3's insert node method
                 temp = ((Node3)current).insertNode(inputValue);
                 
                 if(!temp.isRoot())   //if the new inserted node is not the root
                 {
-                    //Update the parent of the previous node to point to the new inserted node.
+                	//Update the parent of the previous node to point to the new inserted node.
                     temp.getParent().updateChildPtr(current, temp);
                 }
                 else  //if new inserted node is still the root
@@ -825,183 +825,38 @@ public class StructureVisualization extends JApplet implements ActionListener
     }
     
     
-    public void finishDelete(int key)
+    public void finishDelete()
     {
-        boolean done;       // deletion is finished
-        boolean rotationNeeded; // if we need to rotate instead of merge nodes
-        
-        int nextNodeIndex;  // the index in the children array of the next node on the path
-        int swapKey;        // key that will be swapped for an internal delete (if needed)
-        Node keyLocation;   // location of the key to be deleted when swapped
-
-        done = false;
-
-        // if the root and its children are Node2, begin by merging these
-        // done preemptively as all other merging will be done using lookahead
-        if(root instanceof Node2)
+    	//Traverse through the tree until no node left or until key is found
+        while(current != null && !current.hasKey(inputValue))
         {
-            if(root.getChildren()[0] instanceof Node2 && 
-               root.getChildren()[1] instanceof Node2)
-            {
-                root = ((Node2)root).mergeNode2Children();
-            }
+            //Keep track of previous node
+            previous = current;
+            
+            //Find the next node to traverse to
+            current = current.findPath(inputValue);
         }
         
-        current = root;
-        
-        // while the value is not deleted yet
-        while(!done)
+        if(current == null)    //If traversed through whole tree
         {
-            if(current.hasKey(key)) // if this node has the value to delete
-            {
-                if(current.isLeaf()) // case 1: leaf with key
-                {
-                    if(current instanceof Node3 || current instanceof Node4) // if the has >= 2 keys
-                    {
-                        current.deleteLeafKey(key);
-                        done = true;
-                    }
-                }
-                else  // case 2: internal with key
-                {
-                    
-                    // left child has 2+ keys
-                    if(!(current.getChildren()[current.getIndexOf(key)] instanceof Node2))
-                    {
-                        keyLocation = current;
-                        current = current.getChildren()[current.getIndexOf(key)]; // go to left node
-                        
-                        // finding predecessor
-                        while(current.findPath(key) != null)
-                        {
-                            current = current.findPath(key);
-                        }
-                        
-                        // swapkey is the rightmost key of the rightmost predecessor
-                        swapKey = current.getKeys()[current.getKeys().length-1];
-                        
-                        // delete this swapKey from the tree
-                        finishDelete(swapKey);
-                        
-                        // replace the key to delete with swapKey
-                        keyLocation.replaceKey(key, swapKey);
-                    }
-                    // right child has 2+ keys
-                    else if(!(current.getChildren()[current.getIndexOf(key)+1] instanceof Node2))
-                    {
-                        keyLocation = current;
-                        current = current.getChildren()[current.getIndexOf(key)+1]; // go to right node
-                        
-                        // finding successor
-                        while(current.findPath(key) != null)
-                        {
-                            current = current.findPath(key);
-                        }
-                        
-                        // swapkey is the leftmost key of the leftmost successor
-                        swapKey = current.getKeys()[0];
-                        
-                        // delete this swapKey from the tree
-                        finishDelete(swapKey);
-                        
-                        // replace the key to delete with swapKey
-                        keyLocation.replaceKey(key, swapKey);
-                    }
-                    // both have 1 key
-                    else if(current.getChildren()[current.getIndexOf(key)] instanceof Node2 &&
-                            current.getChildren()[current.getIndexOf(key)+1] instanceof Node2)
-                    {
-                        if(current instanceof Node3) // if the current node is a Node3
-                        {
-                            current = ((Node3)current).mergeNode2Children(key);
-                        }
-                        else if(current instanceof Node4) // if the current node is a Node3
-                        {
-                            current = ((Node4)current).mergeNode2Children(key);
-                        }
-                    }
-                }
-            }
-            else // current does not have the key
-            {
-                if(current.findPath(key) instanceof Node2) // the node to travel to is a Node2
-                {
-                    nextNodeIndex = current.getIndexOf(current.findPath(key));
-                    rotationNeeded = false; // assume we don't need rotation and check if we can merge
-                    
-                    
-                    if(current instanceof Node3) // if the current node is a Node3
-                    {
-                        // merge the next node on the path with a parent key and a sibling
-                        // if any of this branch is true
-                        if(nextNodeIndex == 0 && current.getChildren()[1] instanceof Node2)
-                        {
-                            current = ((Node3)current).mergeNode2Children(current.getKeys()[nextNodeIndex]);
-                            
-                            
-                        }
-                        else if(nextNodeIndex == 1 && current.getChildren()[0] instanceof Node2
-                                && current.getChildren()[2] instanceof Node2)
-                        {
-                            current = ((Node3)current).mergeNode2Children(current.getKeys()[nextNodeIndex]);
-                            
-           
-                        }
-                        else if(nextNodeIndex == 2 && current.getChildren()[1] instanceof Node2)
-                        {
-                            current = ((Node3)current).mergeNode2Children(current.getKeys()[nextNodeIndex-1]);
-                            
-                            
-                        }
-                        else
-                        {
-                            rotationNeeded = true;
-                        }
-                    }
-                    else if(current instanceof Node4) // if the current node is a Node4
-                    {
-                        if(nextNodeIndex == 0 && current.getChildren()[1] instanceof Node2)
-                        {
-                            current = ((Node4)current).mergeNode2Children(current.getKeys()[nextNodeIndex]);
-                            
-                            
-                        }
-                        else if(nextNodeIndex == 1 && current.getChildren()[0] instanceof Node2
-                                && current.getChildren()[2] instanceof Node2)
-                        {
-                            current = ((Node4)current).mergeNode2Children(current.getKeys()[nextNodeIndex]);
-                            
-           
-                        }
-                        else if(nextNodeIndex == 2 && current.getChildren()[1] instanceof Node2
-                                && current.getChildren()[3] instanceof Node2)
-                        {
-                            current = ((Node4)current).mergeNode2Children(current.getKeys()[nextNodeIndex]);
-                            
-           
-                        }
-                        else if(nextNodeIndex == 3 && current.getChildren()[2] instanceof Node2)
-                        {
-                            current = ((Node4)current).mergeNode2Children(current.getKeys()[nextNodeIndex-1]);
-                            
-                            
-                        }
-                        else
-                        {
-                            rotationNeeded = true;
-                        }
-                    }
-                    
-                    if(rotationNeeded) // at least one sibling isn't a Node2
-                    {
-                        // rotate a key into this path node
-                        current = ((Node2)current.findPath(key)).performRotation(); // ???? is this how i do this???
-                    }
-                    
-                    current = current.findPath(key);
-                }
-            }
+            //Update current step info.
+            infoField.setText(String.format("%d not found", inputValue));
+            previous.setLastNode(true);
+        }
+        else if(current.hasKey(inputValue))  //If key has been found
+        {
             
+                if((current instanceof Node3 || current instanceof Node3) && current.isLeaf())
+                {
+                	current = current.deleteLeafKey(inputValue);
+                    current.setSelected(true);
+                }
+                else if(current instanceof Node2 && !current.isLeaf())
+                {
+                	current = ((Node2)current).performRotation();
+                    current.setSelected(true);
+                }
+                
         }
         
     }

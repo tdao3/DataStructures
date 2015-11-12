@@ -191,6 +191,78 @@ public class Node3 extends Node
         return updatedNode;
     }
     
+    public Node4 mergeNode2Children(int key)
+    // PRE:  key is a key in this node, and the two children on either side of it
+    //       are both Node2
+    // POST: a new Node4 is created consisting of this node's left child, this node,
+    //       and this node's right child. FCTVAL == the new Node4 created.
+    {
+        Node4 newChild;      // new child node being created from the merge of 2 Node2s
+                             // and key from this Node4
+        Node2 newParent;     // new parent node being created which is like this Node3
+                             // minus the key being merged
+        
+                             
+        if(key == keys[0])
+        {
+            newChild = new Node4(new int[]{children[0].getKeys()[0],
+                                            key,
+                                            children[1].getKeys()[0]},
+                                 new Node[]{children[0].getChildren()[0],
+                                            children[0].getChildren()[1],
+                                            children[1].getChildren()[0],
+                                            children[1].getChildren()[1]},
+                                 null,
+                                 new ScaledPoint());
+                                
+            newParent = new Node2(keys[1],
+                                  new Node[]{newChild, children[2]},
+                                  parent, 
+                                  new ScaledPoint());
+        }
+        else           // MUST equal the second key by PRE
+        {
+            newChild = new Node4(new int[]{children[1].getKeys()[0],
+                                            key,
+                                            children[2].getKeys()[0]},
+                                 new Node[]{children[1].getChildren()[0],
+                                            children[1].getChildren()[1],
+                                            children[2].getChildren()[0],
+                                            children[2].getChildren()[1]},
+                                 null,
+                                 new ScaledPoint());
+                                
+            newParent = new Node2(keys[0],
+                                  new Node[]{children[0], newChild},
+                                  parent, 
+                                  new ScaledPoint());
+        }
+                                
+        // iterate through children of new parent
+        for(Node n : newParent.getChildren())
+        {
+            n.setParent(newParent);
+        }
+        
+        if(!newChild.isLeaf()) // if the child isn't a leaf
+        {
+            // iterate through the children and update the parent pointers
+            // to point back to newNode
+            for(Node n : newChild.getChildren())
+            {
+                n.setParent(newChild);
+            }
+        }
+        
+        if(!newParent.isRoot()) // if the parent isn't the root
+        {
+            // update the parent's child pointer to the newNode
+            parent.updateChildPtr(this, newParent);
+        }
+                         
+        return newChild;
+    }
+    
     public Node findPath(int n)
     //PRE:  n is initialized
     //POST: FCTVAL == the next node on the path to find location of n.

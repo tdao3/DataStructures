@@ -1,9 +1,7 @@
-// Programmer:  TO, AB, TD
-// Assignment:  Group Project 2
-// Date:        November 8th, 2015
-// Description: The class models one type of node that will be placed into the tree. Node3
-//              has exactly three children and two key values
-//
+/*
+Team: 2-3-4 Trio
+Members: TO, TD, AB
+*/
 
 
 import java.awt.FlowLayout;
@@ -27,13 +25,16 @@ public class StructureVisualization extends JApplet implements ActionListener
     private JTextField infoField;        // Text field to display description of current operation on tree.
     private JLabel inputLabel;           // Label for the inputValueField.
     private JLabel infoLabel;            // Label for the infoField.
+    private JLabel structureLabel;       // Label to hold name of structure.
     
     private JPanel buttonPanelSection;   // Panel to hold all button panels.
+    private JPanel northPanel;           // Panel to hold buttonPanelSection and name of structure.
     private JPanel topButtonRow;         // Panel to hold operation buttons and input field.
     private JPanel middleInputRow;       // Panel to hold input value field and label.
     private JPanel bottomButtonRow;      // Panel to hold stepping through operation buttons.
     private JPanel infoPanel;            // Panel to hold text field.
     private JPanel drawingArea;          // Panel where the tree will be displayed.
+    private JPanel titlePanel;           // Panel to hold structureLabel.
     
     private int drawAreaHeight;          // Height of JPanel drawingArea used for drawing tree.
     private int drawAreaWidth;           // Width of JPanel drawingArea  used for drawing tree.
@@ -83,11 +84,15 @@ public class StructureVisualization extends JApplet implements ActionListener
         //Initialize labels.
         inputLabel = new JLabel("Enter integer:");
         infoLabel = new JLabel("Current Step:");
+        structureLabel = new JLabel("2-3-4 Tree");
         
         //Initialize panels.
         buttonPanelSection = new JPanel();
+        northPanel = new JPanel();
+        northPanel.setLayout(new BorderLayout());
         buttonPanelSection.setLayout(new BorderLayout());
         
+        titlePanel = new JPanel();
         infoPanel = new JPanel();
         topButtonRow = new JPanel();
         middleInputRow = new JPanel();
@@ -126,12 +131,17 @@ public class StructureVisualization extends JApplet implements ActionListener
         infoPanel.add(infoLabel);
         infoPanel.add(infoField);
         
+        //Add component to structure name panel.
+        titlePanel.add(structureLabel);
+        
         //Add panels to border layout.
         buttonPanelSection.add(topButtonRow, BorderLayout.NORTH);
         buttonPanelSection.add(middleInputRow, BorderLayout.CENTER);
         buttonPanelSection.add(bottomButtonRow, BorderLayout.SOUTH);
+        northPanel.add(buttonPanelSection, BorderLayout.CENTER);
+        northPanel.add(titlePanel, BorderLayout.NORTH);
         drawingArea.add(infoPanel);
-        add(buttonPanelSection, BorderLayout.NORTH);
+        add(northPanel, BorderLayout.NORTH);
         add(drawingArea, BorderLayout.CENTER);
        
         

@@ -10,7 +10,7 @@ import java.awt.Color;
 
 public class Node3 extends Node
 {
-    public static final int WIDTH = 100; // width of this node 
+    //public static final int WIDTH = 100; // width of this node 
     
     public Node3()
     //POST: An object of Node3 is created with keys {1,2} 
@@ -69,31 +69,34 @@ public class Node3 extends Node
 
         if(selected)   // if this is the selected node 
         {
-        	g.setColor(new Color(120,255,120));  //green
-            g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
+            g.setColor(new Color(120,255,120));  //green
+            g.fillRect(nodeX, nodeY, getNodeWidth(), getNodeHeight());
         }
         else if(lastNode)   //If this is the last node in the stepping process
         {
             g.setColor(new Color(255, 120, 120));
-            g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
+            g.fillRect(nodeX, nodeY, getNodeWidth(), getNodeHeight());
         }
         else if(this == current)    //If this is the current node  
         {
             g.setColor(new Color(200, 200, 200));   //grey
-            g.fillRect(nodeX, nodeY, WIDTH, HEIGHT);
+            g.fillRect(nodeX, nodeY, getNodeWidth(), getNodeHeight());
         }
     
         g.setColor(Color.BLACK);            //sets color to normally be black
 
-        g.drawRect(nodeX, nodeY, WIDTH, HEIGHT);    //draws the actual node 
+        g.drawRect(nodeX, nodeY, getNodeWidth(), getNodeHeight());    //draws the actual node 
         
         // draw dividing line in the middle of the node
-        g.drawLine(nodeX + (WIDTH/2), nodeY,        
-                    nodeX + (WIDTH/2), nodeY + HEIGHT);
+        g.drawLine(nodeX + (getNodeWidth()/2), nodeY,        
+                    nodeX + (getNodeWidth()/2), nodeY + getNodeHeight());
         //draws 2 keys and distance between keys
 
-        g.drawString(Integer.toString(keys[0]), nodeX + 4, nodeY + (HEIGHT/2) + 4);
-        g.drawString(Integer.toString(keys[1]), nodeX + (WIDTH/2) + 4, nodeY + (HEIGHT/2) + 4);
+        g.drawString(Integer.toString(keys[0]), nodeX + 4, 
+                     nodeY + (getNodeHeight()/2) + 4);
+        g.drawString(Integer.toString(keys[1]),
+                     nodeX + (getNodeWidth()/2) + 4, 
+                     nodeY + (getNodeHeight()/2) + 4);
 
         // draw lines to children of this node
         for(int i = 0; i < children.length; i++)            //go through children
@@ -102,20 +105,20 @@ public class Node3 extends Node
             {
                 if (children[i] instanceof Node2) // if the child is a Node2
                 {
-                    g.drawLine(nodeX + ((WIDTH/2)*i), nodeY + HEIGHT,
-                               children[i].coord.getX()+ Node2.WIDTH/2,
+                    g.drawLine(nodeX + ((getNodeWidth()/2)*i), nodeY + getNodeHeight(),
+                               children[i].coord.getX()+ ((Node2)children[i]).getNodeWidth()/2,
                                children[i].coord.getY());
                 }
                 else if (children[i] instanceof Node3) // if the child is a Node3
                 {
-                    g.drawLine(nodeX + ((WIDTH/2)*i), nodeY + HEIGHT,
-                               children[i].coord.getX() + Node3.WIDTH/2,
+                    g.drawLine(nodeX + ((getNodeWidth()/2)*i), nodeY + getNodeHeight(),
+                               children[i].coord.getX() + ((Node3)children[i]).getNodeWidth()/2,
                                children[i].coord.getY());
                 }
                 else if (children[i] instanceof Node4) // if the child is a Node4
                 {
-                    g.drawLine(nodeX + ((WIDTH/2)*i), nodeY + HEIGHT,
-                               children[i].coord.getX() + Node4.WIDTH/2,
+                    g.drawLine(nodeX + ((getNodeWidth()/2)*i), nodeY + getNodeHeight(),
+                               children[i].coord.getX() + ((Node4)children[i]).getNodeWidth()/2,
                                children[i].coord.getY());
                 }
                 
@@ -213,7 +216,7 @@ public class Node3 extends Node
     public int getNodeWidth()
     // POST: FCTVAL == the width of a Node3
     {
-        return WIDTH;
+        return 2*SQUARE_DIMENSION.getMin();
     }
 
     public Node4 insertNode(int insertKey)
@@ -254,23 +257,23 @@ public class Node3 extends Node
         return newNode;
     }
 
-	@Override
-	public Node deleteLeafKey(int key) 
-	{  
-	    Node2 newLeaf;    //new leaf node after deletion
-	    
-	    if(key == this.keys[0])  // if value to delete is the first key
-	    {
-	        newLeaf = new Node2(this.keys[1], new Node[]{null, null}, parent, coord);
-	    }
-	    else   // if value to delete is the second key
-	    {
-	    	newLeaf = new Node2(this.keys[0], new Node[]{null, null}, parent, coord);
-	    }
-	    
-	    //Have parent point to the new leaf node
-	    parent.updateChildPtr(this, newLeaf);
-	    return newLeaf;
-	    
-	}
+    @Override
+    public Node deleteLeafKey(int key) 
+    {  
+        Node2 newLeaf;    //new leaf node after deletion
+        
+        if(key == this.keys[0])  // if value to delete is the first key
+        {
+            newLeaf = new Node2(this.keys[1], new Node[]{null, null}, parent, coord);
+        }
+        else   // if value to delete is the second key
+        {
+            newLeaf = new Node2(this.keys[0], new Node[]{null, null}, parent, coord);
+        }
+        
+        //Have parent point to the new leaf node
+        parent.updateChildPtr(this, newLeaf);
+        return newLeaf;
+        
+    }
 }

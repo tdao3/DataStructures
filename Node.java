@@ -10,7 +10,8 @@ public abstract class Node
 {
     public static final int NODE_SPACING_X = 15; // width between drawn nodes
     public static final int NODE_SPACING_Y = 25;
-    public static final int HEIGHT = 50;  // height of all nodes
+    // dimensions of each square of a node
+    protected static ScaledPoint SQUARE_DIMENSION = new ScaledPoint(.07, .07);
     
     protected int[] keys;         // the keys (1, 2, or 3) of the node
     protected Node[] children;    // the children (2, 3, or 4) of the node
@@ -31,7 +32,7 @@ public abstract class Node
     public abstract Node findPath(int n);           // subclasses finds path taken to get 
                                                     // to node being searched
     
-    public abstract int getNodeWidth();             // returns the width of the type of node    
+    public abstract int getNodeWidth();               // returns the width of the type of node    
     
     public abstract Node deleteLeafKey(int key);    // deletes the key from the leaf node
     
@@ -68,7 +69,7 @@ public abstract class Node
         {
             if(children[i] == oldChild) // if oldChild is found
             {
-            	
+                
                 children[i] = newChild; // set it to newChild
             }
         }
@@ -155,6 +156,55 @@ public abstract class Node
         this.selected = selected;
     }
     
+    
+    public void setLastNodeAll()
+    //PRE: Must be called by a root node object.
+    //POST: Recursively traverse through every node in the tree and set class
+    //      member lastNode to false.
+    {
+        lastNode = false;
+        
+        if(!isLeaf())  // if this node has children
+        {
+            // iterate through each child and set lastNode to false
+            for(Node n : children)
+            {
+               n.setLastNodeAll();
+            }     
+        }
+  
+    }
+    
+    public void setSelectedAll()
+    //PRE: Must be called by a root node object.
+    //POST: Recursively traverse through every node in the tree and set class
+    //      member selected to false.
+    {
+        selected = false;
+        
+        if(!isLeaf())  // if this node has children
+        {
+            // iterate through each child and set selected to false
+            for(Node n : children)
+            {
+               n.setSelectedAll();
+            }     
+        }
+  
+    }
+    
+    public void updateNodeSize(int numNodes)
+    {
+        double newDimension;      // new dimension of the nodes
+        
+        if(numNodes >= 10)
+        {
+            newDimension = .1 - (numNodes*.002);
+            SQUARE_DIMENSION = new ScaledPoint(newDimension, newDimension);
+        }
+        
+    }
+    
     public int getSubtreeWidths()
     // POST: FCTVAL == the width of the subtree of the Node that this method
     //       is invoked upon. Also, subtreeWidth is set to the sum of the children's
@@ -183,43 +233,6 @@ public abstract class Node
         }
     }
     
-    
-    public void setLastNodeAll()
-    //PRE: Must be called by a root node object.
-    //POST: Recursively traverse through every node in the tree and set class
-    //      member lastNode to false.
-    {
-    	lastNode = false;
-    	
-    	if(!isLeaf())  // if this node has children
-    	{
-    		// iterate through each child and set lastNode to false
-            for(Node n : children)
-            {
-               n.setLastNodeAll();
-            }     
-    	}
-  
-    }
-    
-    public void setSelectedAll()
-    //PRE: Must be called by a root node object.
-    //POST: Recursively traverse through every node in the tree and set class
-    //      member selected to false.
-    {
-    	selected = false;
-    	
-    	if(!isLeaf())  // if this node has children
-    	{
-    		// iterate through each child and set selected to false
-            for(Node n : children)
-            {
-               n.setSelectedAll();
-            }     
-    	}
-  
-    }
-    
     public void repositionNodes()
     // PRE:  to be used after getSubtreeWidths() has updated the subtreeWidth 
     //       of each Node
@@ -239,6 +252,7 @@ public abstract class Node
         {
             // set it at the top middle of the screen
             coord = new ScaledPoint(.5, .25);
+            coord.setY(200); // stay offset below top panel
             // shift over slightly so it is centered on screen
             coord.setX(coord.getX() - (getNodeWidth()/2));
         }
@@ -258,7 +272,7 @@ public abstract class Node
             for(Node n : children) // iterate through children and position them
             {
                 n.coord.setX(currentX + (n.subtreeWidth/2)- (n.getNodeWidth()/2));
-                n.coord.setY(coord.getY() + HEIGHT + NODE_SPACING_Y);
+                n.coord.setY(coord.getY() + getNodeHeight() + NODE_SPACING_Y);
                 
                 currentX += n.subtreeWidth + NODE_SPACING_X;
                 
@@ -271,5 +285,10 @@ public abstract class Node
         
         // if it is a leaf and not the root then there is nothing for the node to do
         // it will already be in the right position
+    }
+    
+    public int getNodeHeight()
+    {
+        return SQUARE_DIMENSION.getMin();
     }
 }

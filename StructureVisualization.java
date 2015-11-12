@@ -5,6 +5,7 @@ Members: TO, TD, AB
 
 
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.*;
@@ -49,6 +50,7 @@ public class StructureVisualization extends JApplet implements ActionListener
     
     private String currentKeys;          // String representation of keys of current node.
     private String infoString;           // String representation of the text inside infoField.
+    private String structureName;        // String representation of the name of the structure.
 
     private Node[] nodes;                // Node array all nodes in the tree
     private Node current;                // Current node accessed
@@ -60,6 +62,15 @@ public class StructureVisualization extends JApplet implements ActionListener
         //Set the original GUI size.
         setSize(800,680);                                        
         setLayout(new BorderLayout());        
+        
+        String structureName = "<html><FONT COLOR=RED>2-</FONT>" +
+        		               "<FONT COLOR=GREEN>3-</FONT>"
+        		               + "<FONT COLOR=BLUE>4</FONT>"
+        		               + "<FONT COLOR=RED> T</FONT>"
+        		               + "<FONT COLOR=YELLOW>r</FONT>"
+        		               + "<FONT COLOR=BLUE>e</FONT>"
+        		               + "<FONT COLOR=PURPLE>e</FONT>"
+        		               + "</html>";
         
         //Initialize default values.
         isSearch = false;
@@ -84,7 +95,8 @@ public class StructureVisualization extends JApplet implements ActionListener
         //Initialize labels.
         inputLabel = new JLabel("Enter integer:");
         infoLabel = new JLabel("Current Step:");
-        structureLabel = new JLabel("2-3-4 Tree");
+        structureLabel = new JLabel(structureName);
+        structureLabel.setFont(new Font("Serif", Font.PLAIN, 40));
         
         //Initialize panels.
         buttonPanelSection = new JPanel();
